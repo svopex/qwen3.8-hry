@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arkanoid</title>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="arkanoid-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="arkanoid-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="arkanoid-title">Arkanoid</h1>
+  </header>
+
+  <main class="arkanoid-main">
+    <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (pauza/konec/výhra) -->
+    <div class="board-wrap">
+      <!-- herní pole — rozměr canvasu odpovídá velikosti herní oblasti -->
+      <canvas id="board" class="arkanoid-board" width="480" height="640" aria-label="Herní pole Arkanoidu"></canvas>
+
+      <!-- stavy hry (pauza / konec / výhra) — překryv přes herní pole, skrytý když nepotřebujeme -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Pozastaveno</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Pokračovat</button>
+      </div>
+    </div>
+
+    <!-- boční panel s informacemi a ovládáním -->
+    <aside class="arkanoid-side">
+      <!-- panel se statistikou hry -->
+      <section class="panel stats-panel" aria-label="Statistiky">
+        <div class="stat-row best">
+          <span class="stat-label">Rekord</span>
+          <span class="stat-value" id="best">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Skóre</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Úroveň</span>
+          <span class="stat-value" id="level">1</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Životy</span>
+          <span class="stat-value" id="lives">♥♥♥</span>
+        </div>
+      </section>
+
+      <!-- ovládací prvky — klikací alternativy k klávesnici -->
+      <section class="panel controls-panel" aria-label="Ovládání">
+        <button type="button" id="launchBtn" class="ctrl-btn full">Vystřelit</button>
+        <button type="button" id="pauseBtn" class="ctrl-btn full">Pozastavit</button>
+        <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
+        <p class="keys-help">
+          <strong>Ovládání:</strong><br>
+          ← → / myš = palice,<br>
+          mezerník = odstřel / pauza,<br>
+          R = nová hra
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <!-- patička s odkazem na hlavní stránku rozcestníku -->
+  <footer class="arkanoid-footer">
+    <small>© 2026 Herní rozcestník</small>
+  </footer>
+</body>
+</html>

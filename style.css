@@ -1,0 +1,107 @@
+/* ====== Rozcestník — celkový ráh a fonty ====== */
+:root {
+  /* barevná paleta rozcestníku, jednotlivé hry si mohou definovat vlastní proměnné */
+  --bg: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --fg: #e2e8f0;
+  --accent: #38bdf8;
+  --accent-soft: #0ea5e9;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.menu-body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 60%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 3rem;
+}
+
+/* záhlaví rozcestníku */
+.menu-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.menu-title {
+  margin: 0 0 0.5rem;
+  font-size: 2.4rem;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.menu-subtitle {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+/* mřížka karet — responzivní, na úzkých zařízeních se skládá do sloupce */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* jednotlivá karta hry — celý odkaz je klikací plocha navigující na hru */
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.75rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid #334155;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--fg);
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.game-card:hover,
+.game-card:focus-visible {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* velká ikona (emoji) nad název hry — jemná vizuální identita titulu */
+.game-card .game-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.game-card .game-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.game-card .game-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* patička rozcestníku */
+.menu-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+}

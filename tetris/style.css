@@ -1,0 +1,207 @@
+/* ====== Tetris — vlastní proměnné barev, aby nezávisel na rozcestníku ====== */
+.tetris-body {
+  --bg: #0b1020;
+  --bg-panel: #1b2340;
+  --border: #2b3561;
+  --fg: #e6ecff;
+  --accent: #4f8cff;
+  --danger: #ff5c7a;
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #16204a 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.tetris-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 760px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.tetris-title {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #6ea8ff, #b388ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hlavní rozložení herního pole vedle bočního panelu */
+.tetris-main {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 760px;
+}
+
+/* relativní obal pro herní pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tetris-board {
+  display: block;
+  background: #050816;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+}
+
+/* boční panel — sloupec s informacemi a ovládáním */
+.tetris-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 220px;
+}
+
+/* jednotlivý panel (rámeček) v bočním panelu */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.panel-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: #9fb2ff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tetris-next {
+  display: block;
+  margin: 0 auto;
+  background: #050816;
+  border-radius: 6px;
+}
+
+/* řádek statistiky — popisek vlevo, hodnota vpravo */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+}
+
+.stat-label {
+  color: #9fb2ff;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ovládací tlačítka */
+.ctrl-btn {
+  width: auto;
+  padding: 0.6rem 0.9rem;
+  background: var(--accent);
+  color: #06102a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* tlačítko v plné šířce panelu */
+.ctrl-btn.full {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+/* nápověda s klávesami */
+.keys-help {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #9fb2ff;
+  line-height: 1.6;
+}
+
+/* překryv stavů (pauza / konec) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(5, 8, 22, 0.78);
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* při skrytí overlay (hidden) odpojíme i zobrazení */
+.overlay[hidden] {
+  display: none;
+}
+
+/* na mobilních zařízeních se pole a panel skládají pod sebe */
+@media (max-width: 620px) {
+  .tetris-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tetris-side {
+    width: 100%;
+    max-width: 320px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .panel {
+    flex: 1 1 140px;
+  }
+}

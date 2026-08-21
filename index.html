@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herní rozcestník</title>
+  <!-- externí styl rozcestníku místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí skript rozcestníku místo inline javascriptu -->
+  <script src="app.js" defer></script>
+</head>
+<body class="menu-body">
+  <!-- záhlaví s názvem herního rozcestníku -->
+  <header class="menu-header">
+    <h1 class="menu-title">Herní rozcestník</h1>
+    <p class="menu-subtitle">Vyber si hru, kterou si chceš zahrát</p>
+  </header>
+
+  <!-- kontejner s kartami her; karty generuje app.js, aby se snadno přidávali nové tituly -->
+  <main class="menu-grid" id="menuGrid" aria-label="Seznam her"></main>
+
+  <!-- patička s odkazem na hlavní stránku (případně pro pozdější navigaci) -->
+  <footer class="menu-footer">
+    <small>© 2026 Herní rozcestník</small>
+  </footer>
+</body>
+</html>

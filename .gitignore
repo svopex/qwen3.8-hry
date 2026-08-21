@@ -1,0 +1,7 @@
+# systémové a editační soubory, které nechceme publikovat
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/

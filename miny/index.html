@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miny</title>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="miny-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="miny-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="miny-title">Miny</h1>
+  </header>
+
+  <main class="miny-main">
+    <!-- horní lišta s odpočítávači (miny, čas) a reset tlačítkem -->
+    <div class="hud">
+      <div class="hud-box" aria-label="Zbývající miny">
+        <span class="hud-label">Miny</span>
+        <span class="hud-value" id="minesLeft">80</span>
+      </div>
+
+      <!-- obal tváře — tlačítko pro znovu spuštění hry -->
+      <button type="button" id="faceBtn" class="face" title="Nová hra" aria-label="Nová hra">🙂</button>
+
+      <div class="hud-box" aria-label="Čas">
+        <span class="hud-label">Čas</span>
+        <span class="hud-value" id="timer">0</span>
+      </div>
+    </div>
+
+    <!-- režim práce: odkrývat buňky nebo stavět vlajky (užitečné pro dotyková zařízení) -->
+    <div class="mode-bar">
+      <button type="button" id="revealModeBtn" class="mode-btn active" data-mode="reveal">Odkrývat</button>
+      <button type="button" id="flagModeBtn" class="mode-btn" data-mode="flag">Vlajky</button>
+    </div>
+
+    <!-- rel. obal — uvnitř je velké hrací pole, nad ním může být překryv stavů (výhra/konc) -->
+    <div class="board-wrap">
+      <!-- velké hrací pole — buňky generuje JS do CSS mřížky -->
+      <div id="board" class="miny-board" role="grid" aria-label="Hrací pole Miny"></div>
+
+      <!-- stavy hry (výhra / prohry) — překryv přes hrací pole, skrytý když nepotřebujeme -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Konec hry</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+      </div>
+    </div>
+
+    <!-- nápověda s ovládáním -->
+    <p class="keys-help">
+      <strong>Ovládání:</strong> levé tlačítko = odkrýt, pravé tlačítko = vlajka,
+      dvojklik / stisknuté číslo = rychlé odkrytí sousedů.
+    </p>
+  </main>
+
+  <!-- patička s odkazem na hlavní stránku rozcestníku -->
+  <footer class="miny-footer">
+    <small>© 2026 Herní rozcestník</small>
+  </footer>
+</body>
+</html>

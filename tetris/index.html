@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tetris</title>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="tetris-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="tetris-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="tetris-title">Tetris</h1>
+  </header>
+
+  <main class="tetris-main">
+    <!-- rel. kontejner — nahoře je herní pole, nad ním může být překryv stavů (pauza/konec) -->
+    <div class="board-wrap">
+      <!-- herní pole — rozměr canvasu nastavuje JS podle rozměru hrací mřížky -->
+      <canvas id="board" class="tetris-board" width="300" height="600" aria-label="Herní pole Tetrisu"></canvas>
+
+      <!-- stavy hry (pauza / konec) — překryv přes herní pole, skrytý když nepotřebujeme -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Pauza</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Pokračovat</button>
+      </div>
+    </div>
+
+    <!-- boční panel s informacemi a ovládáním -->
+    <aside class="tetris-side">
+      <!-- panel s náhledem příštího kúsku -->
+      <section class="panel next-panel" aria-label="Příští kus">
+        <h2 class="panel-title">Příští kus</h2>
+        <canvas id="next" class="tetris-next" width="90" height="90" aria-label="Náhled příštího kúsku"></canvas>
+      </section>
+
+      <!-- panel se statistiky hry -->
+      <section class="panel stats-panel" aria-label="Skóre">
+        <div class="stat-row">
+          <span class="stat-label">Skóre</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Úroveň</span>
+          <span class="stat-value" id="level">1</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Řádky</span>
+          <span class="stat-value" id="lines">0</span>
+        </div>
+      </section>
+
+      <!-- ovládací prvky — klikací alternativy k klávesnici -->
+      <section class="panel controls-panel" aria-label="Ovládání">
+        <button type="button" id="pauseBtn" class="ctrl-btn full">Pauza</button>
+        <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
+        <p class="keys-help">
+          <strong>Ovládání:</strong><br>
+          ← → pohyb, ↑ rotace,<br>
+          ↓ spěš, mezerník = pád
+        </p>
+      </section>
+    </aside>
+  </main>
+</body>
+</html>
