@@ -1,0 +1,298 @@
+/* ====== PIŠKVORKY — vlastní proměnné barev ====== */
+/* rozložení je na hranicích, aby padding/border nepřibíraly na šířce pole */
+.pente-body,
+.pente-body * {
+  box-sizing: border-box;
+}
+
+.pente-body {
+  --bg: #0b1020;
+  --bg-panel: #1b2340;
+  --border: #2b3561;
+  --fg: #e6ecff;
+  --accent-x: #ff8a8a;       /* barva hráče ✕ */
+  --accent-o: #5cb8ff;       /* barva počítače ⊙ */
+  --board-bg: #050816;
+  --cell-empty: #11183a;
+  --cell-hover: #1a2350;
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #16204a 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.pente-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 940px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: #6ea8ff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: color-mix(in srgb, #6ea8ff 15%, transparent);
+}
+
+.pente-title {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--accent-x), var(--accent-o));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hlavní rozložení — velká herní plocha uprostřed */
+.pente-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  max-width: 940px;
+}
+
+/* horní lišta s odpočítávači a reset tlačítkem */
+.hud {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hud-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9fb2ff;
+}
+
+.hud-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* obličej — velká kulatá tlačítko pro novou hru */
+.face {
+  font-size: 1.8rem;
+  line-height: 1;
+  padding: 0.55rem 0.95rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.face:hover {
+  filter: brightness(1.15);
+}
+
+.face:active {
+  transform: scale(0.94);
+}
+
+/* lišta tahu — indikace, komu je na tahu */
+.turn-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* tečka — barevný indikátor tahu */
+.dot {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-x {
+  background: var(--accent-x);
+}
+
+.dot-o {
+  background: var(--accent-o);
+}
+
+/* relativní obal pro hrací pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* hrací pole — CSS mřížka 30×20, jako miny; sloupce se přizpůsobí šířce */
+.pente-board {
+  display: grid;
+  grid-template-columns: repeat(30, minmax(0, 1fr));
+  gap: 3px;
+  padding: 8px;
+  width: 100%;
+  background: var(--board-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+}
+
+/* jedna buňka — čtverec přes aspect-ratio */
+.cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.7rem, 1.4vw, 1.15rem);
+  font-weight: 700;
+  user-select: none;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--cell-empty);
+  border: none;
+  border-radius: 4px;
+  transition: background 0.12s ease, box-shadow 0.15s ease;
+}
+
+.cell:hover {
+  background: var(--cell-hover);
+}
+
+/* buňka s kuličkou hráče (✕) */
+.cell.x {
+  background: color-mix(in srgb, var(--accent-x) 20%, var(--cell-empty));
+  color: var(--accent-x);
+  cursor: default;
+}
+
+/* buňka s kuličkou počítače (⊙) */
+.cell.o {
+  background: color-mix(in srgb, var(--accent-o) 20%, var(--cell-empty));
+  color: var(--accent-o);
+  cursor: default;
+}
+
+/* kulička, která je součástí vítězné pětice — zvýrazněná */
+.cell.win {
+  box-shadow: 0 0 0 2px currentColor inset;
+  animation: pulse-win 0.8s ease-in-out;
+}
+
+@keyframes pulse-win {
+  0%   { transform: scale(0.9); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1.0); }
+}
+
+/* překryv stavů (výhra / porážka) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(5, 8, 22, 0.78);
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.ctrl-btn {
+  padding: 0.6rem 1rem;
+  background: var(--accent-x);
+  color: #06102a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* nápověda s pravidly pod polem */
+.keys-help {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9fb2ff;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 720px;
+}
+
+/* patička rozcestníku */
+.pente-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+}
+
+/* na úzkých zařízeních zmenšíme mezery, ať se velké pole vejde do šířky */
+@media (max-width: 720px) {
+  .pente-board {
+    gap: 2px;
+    padding: 6px;
+  }
+
+  .cell {
+    border-radius: 3px;
+  }
+}

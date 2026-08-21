@@ -26,6 +26,12 @@ const HERY = [
     ikona: "🧨",
     href: "arkanoid/index.html",
   },
+  {
+    nazev: "Piškvorky",
+    popis: "Spojte 5 kuliček v řadě a poražte počítač.",
+    ikona: "⚪",
+    href: "pente/index.html",
+  },
   // další hry se přidávají sem, např.:
   // { nazev: "Paměť", popis: "Převoj dvojic karet.", ikona: "🃏", href: "pamet/index.html" },
 ];
