@@ -231,14 +231,15 @@ function zisk(bodyOwner) {
     return;
   }
 
-  // míč servírujeme směrem k hráči, který minul (soupeřovi bodyOwner)
-  // bodyOwner === "left"  → míč letí směrem k pravému hráči  → vx > 0
-  // bodyOwner === "right" → míč letí směrem k levému hráči   → vx < 0
-  resetSirkaMice(bodyOwner === "left" ? "right" : "left");
+  // míč servírujeme směrem k vyhrávajícímu hráči (bodyOwner)
+  // bodyOwner === "left"  → míč letí směrem k levému hráči   → vx < 0
+  // bodyOwner === "right" → míč letí směrem k pravému hráči  → vx > 0
+  resetSirkaMice(bodyOwner);
 }
 
 // ==== Reset míče (servis) po každém bodě ====
-// Parametr "kamLeti" říká, směrem k kterou hráči míč letí ("left" | "right").
+// Parametr "kamLeti" říká, směrem k kterou hráči míč letí.
+// Míč vždy míří k vyhrávajícímu (tomu, kdo právě získal bod).
 function resetSirkaMice(kamLeti) {
   // míč v centru hřiště
   ball.x = COURT_W / 2;
