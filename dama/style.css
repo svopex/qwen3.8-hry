@@ -1,0 +1,348 @@
+/* ====== DÁMA — vlastní proměnné barev ====== */
+.dama-body,
+.dama-body * {
+  box-sizing: border-box;
+}
+
+.dama-body {
+  --bg: #1a1206;
+  --bg-panel: #2b2013;
+  --border: #4a3820;
+  --fg: #f5ecd8;
+  --accent-hra: #d9483b;     /* barva kamene hráče (červená) */
+  --accent-pc: #f2e6c9;      /* barva kamene počítače (krémová) */
+  --board-light: #e8d5a3;    /* světlá šachovniční políčka */
+  --board-dark: #6b4a24;     /* tmavá (hrací) šachovniční políčka */
+  --cell-hover: rgba(255, 255, 255, 0.12);
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #3a2a12 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.dama-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 560px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: #e0b86a;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: rgba(224, 184, 106, 0.15);
+}
+
+.dama-title {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--accent-hra), var(--accent-pc));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dama-title .sub {
+  font-size: 0.9rem;
+  color: #b89a63;
+  -webkit-text-fill-color: #b89a63;
+}
+
+/* hlavní rozložení — herní plocha uprostřed */
+.dama-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* horní lišta s odpočítávači a reset tlačítkem */
+.hud {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hud-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c8a86a;
+}
+
+.hud-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* obličej — velké kulaté tlačítko pro novou hru */
+.face {
+  font-size: 1.8rem;
+  line-height: 1;
+  padding: 0.55rem 0.95rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.face:hover {
+  filter: brightness(1.15);
+}
+
+.face:active {
+  transform: scale(0.94);
+}
+
+/* lišta tahu — indikace, komu je na tahu */
+.turn-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* tečka — barevný indikátor tahu */
+.dot {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-hra {
+  background: var(--accent-hra);
+}
+
+.dot-pc {
+  background: var(--accent-pc);
+}
+
+/* relativní obal pro hrací pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+
+/* hrací šachovnice — CSS mřížka 8×8 */
+.dama-board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0;
+  padding: 6px;
+  width: 100%;
+  background: #3a2a12;
+  border: 3px solid #7a5a2e;
+  border-radius: 10px;
+}
+
+/* jedno políčko — čtverec přes aspect-ratio */
+.cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.2rem, 5vw, 2.2rem);
+  user-select: none;
+  cursor: default;
+  overflow: hidden;
+  background: var(--board-light);
+  transition: box-shadow 0.12s ease, background 0.12s ease;
+}
+
+/* tmavé (hrací) políčko */
+.cell.dark {
+  background: var(--board-dark);
+  cursor: pointer;
+}
+
+.cell.dark:hover {
+  background: color-mix(in srgb, var(--board-dark) 85%, white);
+}
+
+/* kámen — kulatý disk, který vyplní většinu políčka */
+/* samotný kámen kreslíme jako pseudo-element buňky pro hezčí okraj */
+.cell.piece {
+  position: relative;
+}
+
+.cell.piece::before {
+  content: "";
+  width: 74%;
+  height: 74%;
+  border-radius: 50%;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* kámen hráče (červený) */
+.cell.piece.hra::before {
+  background: radial-gradient(circle at 35% 30%, #f07a6d, var(--accent-hra) 70%);
+}
+
+/* kámen počítače (krémový) */
+.cell.piece.pc::before {
+  background: radial-gradient(circle at 35% 30%, #fffaf0, var(--accent-pc) 70%);
+}
+
+/* dáma — výrazně odlišená od obyčejného kamene:
+   zlatý prstenec kolem disku + velká koruna uprostřed */
+.cell.king {
+  z-index: 1;
+  font-size: clamp(1.5rem, 6vw, 2.8rem);
+  line-height: 1;
+  color: #ffd84d;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* zlatý prstenec kolem disku dámy — jasně signalizuje vyšší hodnost */
+.cell.king::before {
+  width: 80%;
+  height: 80%;
+  border: 3px solid #ffd84d;
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.35),
+    0 0 8px 2px rgba(255, 216, 77, 0.55);
+}
+
+/* zvýraznění vybraného kamene */
+.cell.vybrany::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: 3px solid #ffe98a;
+  box-shadow: 0 0 10px 2px rgba(255, 233, 138, 0.7);
+  z-index: 2;
+}
+
+/* zvýraznění legálního cílového políčka */
+.cell.cil::after {
+  content: "";
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  background: rgba(255, 233, 138, 0.55);
+  position: absolute;
+  z-index: 2;
+}
+
+/* překryv stavů (výhra / porážka) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(26, 18, 6, 0.82);
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.ctrl-btn {
+  padding: 0.6rem 1rem;
+  background: var(--accent-hra);
+  color: #fff8f0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* nápověda s pravidly pod polem */
+.keys-help {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #c8a86a;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 460px;
+}
+
+/* patička rozcestníku */
+.dama-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #7a6238;
+}
+
+/* na úzkých zařízeních zmenšíme políčka a mezery */
+@media (max-width: 480px) {
+  .dama-board {
+    padding: 4px;
+    border-width: 2px;
+  }
+
+  .cell {
+    font-size: clamp(0.9rem, 7vw, 1.6rem);
+  }
+}

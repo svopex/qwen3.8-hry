@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dáma</title>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="dama-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="dama-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="dama-title">DÁMA <span class="sub">— desková hra 8×8</span></h1>
+  </header>
+
+  <main class="dama-main">
+    <!-- horní lišta s indikátorem tahu, reset tlačítkem a skóre hráčů -->
+    <div class="hud">
+      <div class="hud-box" aria-label="Pořadí tahu">
+        <span class="hud-label">Tah</span>
+        <span class="hud-value" id="moveCount">1</span>
+      </div>
+
+      <!-- obal tváře — tlačítko pro znovu spuštění hry -->
+      <button type="button" id="faceBtn" class="face" title="Nová hra" aria-label="Nová hra">🙂</button>
+
+      <div class="hud-box" aria-label="Skóre hráče">
+        <span class="hud-label">Vy</span>
+        <span class="hud-value" id="scoreHra">0</span>
+      </div>
+
+      <div class="hud-box" aria-label="Skóre počítače">
+        <span class="hud-label">Počítač</span>
+        <span class="hud-value" id="scorePc">0</span>
+      </div>
+    </div>
+
+    <!-- aktivní hráč — indikace, komu je na tahu -->
+    <div class="turn-bar" id="turnBar">
+      <span class="dot dot-hra"></span> Hrajete vy — klikněte na svůj kámen
+    </div>
+
+    <!-- relativní obal — uvnitř je hrací šachovnice, nad ní může být překryv stavů -->
+    <div class="board-wrap">
+      <!-- hrací pole — 8×8 šachovnice, buňky generuje JS do CSS mřížky -->
+      <div id="board" class="dama-board" role="grid" aria-label="Hrací pole DÁMY"></div>
+
+      <!-- stavy hry (výhra / porážka) — překryv přes hrací pole, skrytý když nepotřebujeme -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Konec hry</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+      </div>
+    </div>
+
+    <!-- nápověda s pravidly -->
+    <p class="keys-help">
+      <strong>Pravidla:</strong> Kameny se pohybují diagonálně dopředu.
+      Skákáním přes soupeřův kámen ho znižíte — <strong>skok je povinný</strong>.
+      Na poslední řadě se kámen promění v <strong>dámu</strong>, která kluzem letí libovolně daleko.
+      Vyhrává, kdo zničí všechny soupeřovy kameny.
+    </p>
+  </main>
+
+  <!-- patička s odkazem na hlavní stránku rozcestníku -->
+  <footer class="dama-footer">
+    <small>© 2026 Herní rozcestník</small>
+  </footer>
+</body>
+</html>

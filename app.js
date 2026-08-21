@@ -38,6 +38,12 @@ const HERY = [
     ikona: "🎾",
     href: "tenis/index.html",
   },
+  {
+    nazev: "Dáma",
+    popis: "Desková hra — skákejte, proměňujte a poražte počítač.",
+    ikona: "♛",
+    href: "dama/index.html",
+  },
   // další hry se přidávají sem, např.:
   // { nazev: "Paměť", popis: "Převoj dvojic karet.", ikona: "🃏", href: "pamet/index.html" },
 ];
