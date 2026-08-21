@@ -44,6 +44,12 @@ const HERY = [
     ikona: "♛",
     href: "dama/index.html",
   },
+  {
+    nazev: "2048",
+    popis: "Spojujte stejné dlaždice šipkami, dokud nedosáhnete 2048.",
+    ikona: "🔢",
+    href: "2048/index.html",
+  },
   // další hry se přidávají sem, např.:
   // { nazev: "Paměť", popis: "Převoj dvojic karet.", ikona: "🃏", href: "pamet/index.html" },
 ];

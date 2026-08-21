@@ -1,0 +1,232 @@
+/* ====== 2048 — vlastní proměnné barev, aby hra nezávisela na rozcestníku ====== */
+.g2048-body,
+.g2048-body * {
+  box-sizing: border-box;
+}
+
+.g2048-body {
+  --bg: #0b1020;
+  --bg-panel: #1b2340;
+  --border: #2b3561;
+  --fg: #e6ecff;
+  --accent: #4f8cff;
+  --cell-empty: #10162b;
+  --cell-base: #2a3458;
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #16204a 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.g2048-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.g2048-title {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #f2b134, #e67e22);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hlavní rozložení — sloupec uprostřed */
+.g2048-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+}
+
+/* horní lišta se statistikami a tlačítkem nové hry */
+.hud {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* jeden ukazatel (skóre / rekord) — tmavý displej */
+.hud-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 90px;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9fb2ff;
+}
+
+.hud-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* tlačítko nové hry v liště */
+.ctrl-btn {
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: #06102a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* krátké pravidlo hry nad polem */
+.rule-help {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9fb2ff;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* relativní obal pro hrací pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* hrací pole — CSS mřížka 4x4 se stejnoměrnými mezery */
+.g2048-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  touch-action: none; /* zamezuje scrollu stránky při tažení po poli */
+}
+
+/* jedna dlaždice — čtverec s hodnotou uprostřed */
+.cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.3rem, 6vw, 2.2rem);
+  font-weight: 700;
+  user-select: none;
+  border-radius: 8px;
+  background: var(--cell-empty);
+  color: #f7f1e3;
+  transition: background 0.12s ease;
+}
+
+/* barvy jednotlivých hodnot dlaždic (klasická paleta 2048) */
+.cell.v-2    { background: #eee4da; color: #776e65; }
+.cell.v-4    { background: #ede0c8; color: #776e65; }
+.cell.v-8    { background: #f2b179; color: #f9f6f2; }
+.cell.v-16   { background: #f59563; color: #f9f6f2; }
+.cell.v-32   { background: #f67c5f; color: #f9f6f2; }
+.cell.v-64   { background: #f65e3b; color: #f9f6f2; }
+.cell.v-128  { background: #edcf72; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.cell.v-256  { background: #edcc61; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.cell.v-512  { background: #edc850; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.cell.v-1024 { background: #edc53f; color: #f9f6f2; font-size: clamp(0.9rem, 4vw, 1.5rem); }
+
+/* dlaždice 2048 a vyšší — zlaté zvýraznění pro úspěch */
+.cell.v-max  {
+  background: linear-gradient(135deg, #ffd54f, #ff8f00);
+  color: #3a2a00;
+  font-size: clamp(0.9rem, 4vw, 1.5rem);
+}
+
+/* překryv stavů (výhra / konec) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(5, 8, 22, 0.78);
+  border-radius: 14px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+/* při skrytí overlay (hidden) odpojíme i zobrazení */
+.overlay[hidden] {
+  display: none;
+}
+
+/* nápověda s ovládáním pod polem */
+.keys-help {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9fb2ff;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* patička rozcestníku */
+.g2048-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+}
