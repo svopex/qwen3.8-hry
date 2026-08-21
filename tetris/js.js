@@ -283,6 +283,8 @@ function prudkyPad() {
 function posunKoniec() {
   prilepiKusk();
   zjistiPlneRidky();
+  // zafixovaný kús a případně odstraněné řádky ihned obnoví
+  vykresliPole();
   if (gameOver) {
     konecHry();
     return;
@@ -292,8 +294,15 @@ function posunKoniec() {
   // příštím se stává další kus z fronty (pro náhled)
   pristi = nextTyp();
   nastaviNovyKusk(typ);
+  // hra končí, když se nový kús zrodí v kolizi s existujícími kusy (hromada dosáhla střechy)
+  if (kolize(kusk.typ, kusk.otoceni, kusk.x, kusk.y)) {
+    vykresliKusk();
+    konecHry();
+    return;
+  }
   vykresliNahled();
   aktualizujStat();
+  vykresliKusk();
 }
 
 // Vytvoří nový kús z daného typu a umístí ho na startovní pozici.
@@ -328,6 +337,10 @@ function pauza() {
 }
 
 function spustPokrac() {
+  // po konci hry hru neobnovuji — restartuje pouze tlačítko "Zkusit znovu"
+  if (gameOver) {
+    return;
+  }
   paused = false;
   lastTime = performance.now();
   pokazHry(false);
@@ -371,6 +384,10 @@ function restart() {
   vykresliPole();
   vykresliKusk();
   pokazHry(false);
+  // po konci hry byla animace zastavena (rafId = null) — znovu ji spusti
+  if (!rafId) {
+    rafId = requestAnimationFrame(krok);
+  }
 }
 
 // ---- Hlavní animace ----
