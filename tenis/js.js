@@ -62,8 +62,9 @@ const keys = {
 
 // Vykreslí pozadí a bílé přerušované středové čáry.
 function vykresliPozadi() {
-  // pozadí je nastavené v CSS (průhledné canvas), zde jen středové čáry
-  ctx.strokeStyle = "rgba(230,236,255,0.22)";
+  // pozadí je nastavené v CSS (průhledné canvas), zde jen středové čáry;
+  // barva se liší podle motivu (tmavá na světlém pozadí, světlá na tmavém)
+  ctx.strokeStyle = window.hrySvetlyMotiv() ? "rgba(30,41,59,0.28)" : "rgba(230,236,255,0.22)";
   ctx.lineWidth = 3;
   ctx.setLineDash([14, 16]);
   ctx.beginPath();
@@ -89,15 +90,10 @@ function nakresliRaketu(x, y, fill) {
   ctx.fill();
 }
 
-// Vykreslí míč jako kruh s jemným zářením.
+// Vykreslí míč jako plnou oranžovou kouli (bez záře) — výrazný kontrast na obou motivech.
 function nakresliMic() {
-  // vnější záře
-  ctx.fillStyle = "rgba(250,204,21,0.25)";
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, BALL_R * 1.7, 0, Math.PI * 2);
-  ctx.fill();
-  // jádro míče
-  ctx.fillStyle = "#facc15";
+  // plná oranžová koule míče
+  ctx.fillStyle = "#ff7a00";
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
   ctx.fill();
@@ -407,6 +403,11 @@ overlayBtn.addEventListener("click", () => {
 restartBtn.addEventListener("click", () => {
   restart();
   if (!rafId) rafId = requestAnimationFrame(krokAnimace);
+});
+
+// při přepnutí motivu si hřiště překreslí (barva středové čáry se liší dle motivu)
+window.addEventListener("hry:motiv", () => {
+  vykresli();
 });
 
 // ==== Spouštění ====

@@ -346,3 +346,59 @@
     font-size: clamp(0.9rem, 7vw, 1.6rem);
   }
 }
+
+/* ====== Světlý motiv dámy (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Teplá světlá paleta; dřevěná šachovnice zůstává, mění se pozadí a panely. */
+html[data-motiv="svetly"] .dama-body {
+  --bg: #f5efe2;
+  --bg-panel: #ffffff;
+  --border: #d8c9a3;
+  --fg: #3a2a12;
+  --accent-hra: #d9483b;
+  --accent-pc: #6b4a24;
+  --board-light: #f0e2bd;
+  --board-dark: #8a6234;
+  --cell-hover: rgba(255, 255, 255, 0.25);
+}
+
+/* světlé pozadí stránky — teplá jasná tónová škála */
+html[data-motiv="svetly"] .dama-body {
+  background: radial-gradient(circle at top, #fffaf0 0%, var(--bg) 70%);
+}
+
+/* nadpis — barvy kamene hráče a počítače (tmavší pro čitelnost na světle) */
+html[data-motiv="svetly"] .dama-title {
+  background: linear-gradient(90deg, var(--accent-hra), var(--accent-pc));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* odkaz zpět — tmavší zlatý odstín pro kontrast na světlém pozadí */
+html[data-motiv="svetly"] .back-link {
+  color: #b8860b;
+}
+
+html[data-motiv="svetly"] .back-link:hover {
+  background: rgba(184, 134, 11, 0.15);
+}
+
+/* popisky ukazatelů a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .hud-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #8a6234;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 250, 240, 0.85);
+}
+
+/* tlačítko (barva kamene hráče) — bílý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #fff8f0;
+}
+
+/* patička — čitelný tmavý odstín */
+html[data-motiv="svetly"] .dama-footer {
+  color: #8a6234;
+}

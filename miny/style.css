@@ -299,3 +299,70 @@
     padding: 6px;
   }
 }
+
+/* ====== Světlý motiv Miny (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; tmavý motiv zůstává výchozí. */
+html[data-motiv="svetly"] .miny-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent: #2563eb;
+  --cell-hidden: #e2e8f0;
+  --cell-hidden-hover: #cbd5e1;
+  --cell-open: #f8fafc;
+  --cell-mine: #fecaca;
+  --danger: #e11d48;
+}
+
+/* světlé pozadí stránky a viditelná plocha hracího pole */
+html[data-motiv="svetly"] .miny-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+html[data-motiv="svetly"] .miny-board {
+  background: #eef2f8;
+}
+
+/* odhalená buňka — světlejší rámeček pro čitelnost na světlém pozadí */
+html[data-motiv="svetly"] .cell.open {
+  border-color: #e2e8f0;
+}
+
+/* nadpis — tmavší gradient pro čitelnost na světlém pozadí */
+html[data-motiv="svetly"] .miny-title {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* popisky ukazatelů a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .hud-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko akcentu — tmavý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #ffffff;
+}
+
+/* čísla 1–8 — tmavší odstíny, aby byla čitelná na světlých odhalených buňkách */
+html[data-motiv="svetly"] .cell.n1 { color: #2563eb; }
+html[data-motiv="svetly"] .cell.n2 { color: #16a34a; }
+html[data-motiv="svetly"] .cell.n3 { color: #dc2626; }
+html[data-motiv="svetly"] .cell.n4 { color: #7c3aed; }
+html[data-motiv="svetly"] .cell.n5 { color: #c2410c; }
+html[data-motiv="svetly"] .cell.n6 { color: #0d9488; }
+html[data-motiv="svetly"] .cell.n7 { color: #b45309; }
+html[data-motiv="svetly"] .cell.n8 { color: #334155; }
+
+/* patička — čitelný tmavý odstín */
+html[data-motiv="svetly"] .miny-footer {
+  color: #64748b;
+}

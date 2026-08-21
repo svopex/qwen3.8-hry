@@ -235,3 +235,54 @@
     flex: 1 1 160px;
   }
 }
+
+/* ====== Světlý motiv tenisu (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; tmavý motiv zůstává výchozí. */
+html[data-motiv="svetly"] .tenis-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent: #ca8a04;
+  --p1: #2563eb;
+  --p2: #e11d48;
+  --line: #1e293b;
+}
+
+/* světlé pozadí stránky a viditelná plocha hřiště */
+html[data-motiv="svetly"] .tenis-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+html[data-motiv="svetly"] .tenis-board {
+  background: #eef2f8;
+}
+
+/* nadpis — barvy obou hráčů (tmavší pro čitelnost na světlém pozadí) */
+html[data-motiv="svetly"] .tenis-title {
+  background: linear-gradient(90deg, var(--p1), var(--p2));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* popis pravidla, popisky skóre a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .rule-hint,
+html[data-motiv="svetly"] .score-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko akcentu (žluté) — tmavý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #1e293b;
+}
+
+/* patička — čitelný tmavý odstín */
+html[data-motiv="svetly"] .tenis-footer {
+  color: #64748b;
+}

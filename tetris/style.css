@@ -1,4 +1,10 @@
 /* ====== Tetris — vlastní proměnné barev, aby nezávisel na rozcestníku ====== */
+/* rozložení měří po hranicích, aby padding/border nepřibíraly na šířce */
+.tetris-body,
+.tetris-body * {
+  box-sizing: border-box;
+}
+
 .tetris-body {
   --bg: #0b1020;
   --bg-panel: #1b2340;
@@ -204,4 +210,56 @@
   .panel {
     flex: 1 1 140px;
   }
+}
+
+/* patička — přilepená ke dnu díky margin-top:auto ve flex sloupci */
+.tetris-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+}
+
+/* ====== Světlý motiv Tetrisu (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; tmavý motiv zůstává výchozí. */
+html[data-motiv="svetly"] .tetris-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent: #2563eb;
+  --danger: #e11d48;
+}
+
+/* světlé pozadí stránky a viditelné plochy herního pole a náhledu */
+html[data-motiv="svetly"] .tetris-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+html[data-motiv="svetly"] .tetris-board,
+html[data-motiv="svetly"] .tetris-next {
+  background: #eef2f8;
+}
+
+/* nadpis — tmavší gradient pro čitelnost na světlém pozadí */
+html[data-motiv="svetly"] .tetris-title {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* popisky statistik a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .panel-title,
+html[data-motiv="svetly"] .stat-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko akcentu — tmavý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #ffffff;
 }

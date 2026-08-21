@@ -401,15 +401,10 @@ function vykresliPalici() {
   ctx.fill();
 }
 
-// Vykreslí míček se září.
+// Vykreslí míček — sytá oranžová pro výrazný kontrast na obou motivech (bez záře).
 function vykresliMicek() {
-  // záře
-  ctx.fillStyle = "rgba(246,224,94,0.25)";
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.r + 4, 0, Math.PI * 2);
-  ctx.fill();
-  // jádro
-  ctx.fillStyle = "#f6e05e";
+  // plná oranžová koule míčku
+  ctx.fillStyle = "#ff7a00";
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
   ctx.fill();
@@ -435,9 +430,9 @@ function vykresli() {
   // míček (i když je připravená na palici)
   vykresliMicek();
 
-  // nápověda, když je míček připraven na odstřel
+  // nápověda, když je míček připraven na odstřel; barva dle motivu (tmavá na světlém pozadí)
   if (ball.stuck && !gameOver) {
-    ctx.fillStyle = "rgba(230,236,255,0.75)";
+    ctx.fillStyle = window.hrySvetlyMotiv() ? "rgba(30,41,59,0.8)" : "rgba(230,236,255,0.75)";
     ctx.font = "15px 'Segoe UI', system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("Klikni nebo stiskni mezerník a odpočí míček", W / 2, H / 2);
@@ -573,6 +568,11 @@ overlayBtn.addEventListener("click", () => {
 });
 
 restartBtn.addEventListener("click", restart);
+
+// při přepnutí motivu si herní pole překreslí (barva nápovědy se liší dle motivu)
+window.addEventListener("hry:motiv", () => {
+  vykresli();
+});
 
 // ==== Spouštění ====
 document.addEventListener("DOMContentLoaded", () => {

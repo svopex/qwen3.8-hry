@@ -296,3 +296,63 @@
     border-radius: 3px;
   }
 }
+
+/* ====== Světlý motiv pišvorky (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; tmavý motiv zůstává výchozí. */
+html[data-motiv="svetly"] .pente-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent-x: #dc2626;
+  --accent-o: #2563eb;
+  --board-bg: #eef2f8;
+  --cell-empty: #e2e8f0;
+  --cell-hover: #cbd5e1;
+}
+
+/* světlé pozadí stránky a viditelná plocha hracího pole */
+html[data-motiv="svetly"] .pente-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+html[data-motiv="svetly"] .pente-board {
+  background: var(--board-bg);
+}
+
+/* nadpis — barvy obou hráčů (tmavší pro čitelnost na světlém pozadí) */
+html[data-motiv="svetly"] .pente-title {
+  background: linear-gradient(90deg, var(--accent-x), var(--accent-o));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* odkaz zpět — tmavší akcent pro kontrast na světle */
+html[data-motiv="svetly"] .back-link {
+  color: var(--accent-o);
+}
+
+html[data-motiv="svetly"] .back-link:hover {
+  background: rgba(37, 99, 235, 0.15);
+}
+
+/* popisky ukazatelů a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .hud-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko (barva hráče ✕) — tmavý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #ffffff;
+}
+
+/* patička — čitelný tmavý odstín */
+html[data-motiv="svetly"] .pente-footer {
+  color: #64748b;
+}

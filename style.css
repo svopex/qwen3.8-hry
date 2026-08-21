@@ -113,3 +113,51 @@ body.menu-body {
   margin-top: 0.35rem;
   color: #475569;
 }
+
+/* ====== Světlý motiv rozcestníku (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné; tmavý motiv zůstává výchozí, světlý jen mění paletu. */
+html[data-motiv="svetly"] {
+  --bg: #eef2f8;
+  --bg-card: #ffffff;
+  --bg-card-hover: #e2e8f0;
+  --fg: #1e293b;
+  --accent: #0284c7;
+  --accent-soft: #0ea5e9;
+}
+
+/* světlé pozadí stránky — jasný gradient místo tmavého */
+html[data-motiv="svetly"] body.menu-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 60%);
+}
+
+/* nadpis zůstává gradientem, ale s tmavším akcentem pro čitelnost na světle */
+html[data-motiv="svetly"] .menu-title {
+  background: linear-gradient(90deg, var(--accent), #7c3aed);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* jemnější popisky a patička — tmavší odstíny pro kontrast na světlém pozadí */
+html[data-motiv="svetly"] .menu-subtitle,
+html[data-motiv="svetly"] .game-desc {
+  color: #475569;
+}
+
+/* karty — světlé pozadí, viditelný rámeček, jemnější stín */
+html[data-motiv="svetly"] .game-card {
+  border-color: #cbd5e1;
+}
+
+html[data-motiv="svetly"] .game-card:hover,
+html[data-motiv="svetly"] .game-card:focus-visible {
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+/* patička a autorská poznámka — čitelné tmavé odstíny */
+html[data-motiv="svetly"] .menu-footer {
+  color: #64748b;
+}
+
+html[data-motiv="svetly"] .menu-credit {
+  color: #94a3b8;
+}

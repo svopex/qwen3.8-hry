@@ -267,3 +267,62 @@
     grid-template-columns: repeat(3, minmax(40px, 1fr));
   }
 }
+
+/* ====== Světlý motiv Hada (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; tmavý motiv zůstává výchozí. */
+html[data-motiv="svetly"] .snake-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent: #2563eb;
+  --danger: #e11d48;
+  --head: #16a34a;
+  --body: #2563eb;
+  --food: #dc2626;
+}
+
+/* světlé pozadí stránky a viditelná plocha hracího pole (jemná mřížka) */
+html[data-motiv="svetly"] .snake-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+html[data-motiv="svetly"] .snake-board {
+  background:
+    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.04) 0 1px, transparent 1px 24px),
+    #eef2f8;
+}
+
+/* nadpis — tmavší gradient pro čitelnost na světlém pozadí */
+html[data-motiv="svetly"] .snake-title {
+  background: linear-gradient(90deg, #16a34a, #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* popis pravidla, popisky statistik a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .rule-hint,
+html[data-motiv="svetly"] .stat-label,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* rekord — zvýrazněná barva hlavy hada (tmavší zelená na světle) */
+html[data-motiv="svetly"] .stat-row.best .stat-value {
+  color: var(--head);
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko akcentu — tmavý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #ffffff;
+}
+
+/* patička — čitelný tmavý odstín */
+html[data-motiv="svetly"] .snake-footer {
+  color: #64748b;
+}

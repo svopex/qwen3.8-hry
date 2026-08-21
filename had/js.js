@@ -56,8 +56,9 @@ function velikostBufky() {
 // Vykreslí pozadí a jemnou mřížku.
 function vykresliPozadi() {
   const velikost = velikostBufky();
-  // pozadí je v CSS, zde jen jemné mřížkové linky na hranách buněk
-  ctx.strokeStyle = "rgba(255,255,255,0.04)";
+  // pozadí je v CSS, zde jen jemné mřížkové linky na hranách buněk;
+  // barva linky se liší podle motivu (světlá na tmavém, tmavá na světlém pozadí)
+  ctx.strokeStyle = window.hrySvetlyMotiv() ? "rgba(15,23,42,0.06)" : "rgba(255,255,255,0.04)";
   ctx.lineWidth = 1;
   for (let i = 1; i < COLS; i++) {
     ctx.beginPath();
@@ -450,6 +451,11 @@ restartBtn.addEventListener("click", () => {
 // D-pad (směrová tlačítka)
 document.querySelectorAll(".dpad").forEach((btn) => {
   btn.addEventListener("click", () => prerazRejst(btn.dataset.dir));
+});
+
+// při přepnutí motivu (tmavý / světlý) si herní pole překreslí novými barvami mřížky
+window.addEventListener("hry:motiv", () => {
+  vykresli();
 });
 
 // ==== Spouštění ====

@@ -95,6 +95,12 @@ function velikostBufku() {
   return board.width / COLS;
 }
 
+// Barva pozadí prázdných políček — liší se podle aktivního motivu (tmavý / světlý).
+function barvaPozadiPole() {
+  // světlý motiv = světlé pozadí, jinak tmavé výchozí
+  return window.hrySvetlyMotiv() ? "#eef2f8" : "#0a0f24";
+}
+
 // Vykreslí jednu buňku (s hranou a jemným odleskem) v dané pozici mřížky.
 function nakresliBufku(c, x, y, barevnyIndex, velikost) {
   const vx = x * velikost;
@@ -113,8 +119,8 @@ function nakresliBufku(c, x, y, barevnyIndex, velikost) {
 function vykresliPole() {
   ctx.clearRect(0, 0, board.width, board.height);
 
-  // pozadí prázdných políček
-  ctx.fillStyle = "#0a0f24";
+  // pozadí prázdných políček — barva dle aktivního motivu
+  ctx.fillStyle = barvaPozadiPole();
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
       ctx.fillRect(x * velikostBufku(), y * velikostBufku(), velikostBufku(), velikostBufku());
@@ -487,6 +493,12 @@ overlayBtn.addEventListener("click", () => {
 });
 
 restartBtn.addEventListener("click", restart);
+
+// při přepnutí motivu (tmavý / světlý) si herní pole překreslí novými barvami pozadí
+window.addEventListener("hry:motiv", () => {
+  vykresliPole();
+  vykresliKusk();
+});
 
 // ---- Spouštění ----
 document.addEventListener("DOMContentLoaded", () => {
