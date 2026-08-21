@@ -104,4 +104,12 @@ body.menu-body {
   margin-top: auto;
   padding-top: 2rem;
   color: #64748b;
+  text-align: center;
+}
+
+/* autorská poznámka o AI modelu — jemnější odstín pod autorským řádkem */
+.menu-credit {
+  display: block;
+  margin-top: 0.35rem;
+  color: #475569;
 }

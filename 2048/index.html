@@ -39,8 +39,13 @@
 
     <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (výhra / konec) -->
     <div class="board-wrap">
-      <!-- hrací pole 4x4 — buňky generuje JS do CSS mřížky -->
-      <div id="board" class="g2048-board" role="grid" aria-label="Hrací pole 2048"></div>
+      <!-- hrací pole: spodní vrstva = prázdná pozadí, horní vrstva = animované dlaždice -->
+      <div id="board" class="g2048-board" role="grid" aria-label="Hrací pole 2048">
+        <!-- statické pozadí políček, aby byla vidět mřížka i bez dlaždic -->
+        <div class="grid-bg" id="gridBg" aria-hidden="true"></div>
+        <!-- vrstva dlaždic, do které JS přidává a posouvá animované dlaždice -->
+        <div class="tiles" id="tiles"></div>
+      </div>
 
       <!-- stavy hry (výhra / konec) — překryv přes hrací pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>

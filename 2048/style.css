@@ -141,22 +141,40 @@
   max-width: 440px;
 }
 
-/* hrací pole — CSS mřížka 4x4 se stejnoměrnými mezery */
+/* hrací pole — relativní kontejner se dvěma vrstvami (pozadí + dlaždice) */
 .g2048-board {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  padding: 10px;
+  --pad: 10px; /* vnitřní okraj; musí odpovídat inset vrstvy dlaždic */
+  position: relative;
+  padding: var(--pad);
   background: var(--bg-panel);
   border: 2px solid var(--border);
   border-radius: 14px;
   touch-action: none; /* zamezuje scrollu stránky při tažení po poli */
 }
 
-/* jedna dlaždice — čtverec s hodnotou uprostřed */
-.cell {
+/* spodní vrstva — statické pozadí políček 4x4, dává poli rozměr a mřížku */
+.grid-bg {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* jedno prázdné pozadí políčka (čtverec přes aspect-ratio) */
+.bg-cell {
   aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background: var(--cell-empty);
+}
+
+/* horní vrstva — absolutně položená nad pozadí, nese animované dlaždice */
+.tiles {
+  position: absolute;
+  inset: var(--pad); /* zarovnání s obsahem pole (vnitřní okraj) */
+}
+
+/* jedna dlaždice — absolutně položená, positionuje ji JS přes left/top */
+.tile {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,25 +182,43 @@
   font-weight: 700;
   user-select: none;
   border-radius: 8px;
-  background: var(--cell-empty);
-  color: #f7f1e3;
-  transition: background 0.12s ease;
+  color: #f9f6f2;
+  /* plynulý posun při tahu; rozměry se mění jen při změně velikosti okna */
+  transition: left 0.13s ease-in-out, top 0.13s ease-in-out,
+              width 0.13s ease, height 0.13s ease;
+  will-change: transform;
 }
 
+/* objev nové dlaždice — jemné zvětšení od nuly */
+@keyframes dlazdice-objev {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+/* dlaždice vzniklá sloučením — mírné „vyfouknutí" dolehnutí */
+@keyframes dlazdice-pop {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.tile.new    { animation: dlazdice-objev 0.18s ease; }
+.tile.merged { animation: dlazdice-pop 0.2s ease; }
+
 /* barvy jednotlivých hodnot dlaždic (klasická paleta 2048) */
-.cell.v-2    { background: #eee4da; color: #776e65; }
-.cell.v-4    { background: #ede0c8; color: #776e65; }
-.cell.v-8    { background: #f2b179; color: #f9f6f2; }
-.cell.v-16   { background: #f59563; color: #f9f6f2; }
-.cell.v-32   { background: #f67c5f; color: #f9f6f2; }
-.cell.v-64   { background: #f65e3b; color: #f9f6f2; }
-.cell.v-128  { background: #edcf72; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
-.cell.v-256  { background: #edcc61; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
-.cell.v-512  { background: #edc850; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
-.cell.v-1024 { background: #edc53f; color: #f9f6f2; font-size: clamp(0.9rem, 4vw, 1.5rem); }
+.tile.v-2    { background: #eee4da; color: #776e65; }
+.tile.v-4    { background: #ede0c8; color: #776e65; }
+.tile.v-8    { background: #f2b179; color: #f9f6f2; }
+.tile.v-16   { background: #f59563; color: #f9f6f2; }
+.tile.v-32   { background: #f67c5f; color: #f9f6f2; }
+.tile.v-64   { background: #f65e3b; color: #f9f6f2; }
+.tile.v-128  { background: #edcf72; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.tile.v-256  { background: #edcc61; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.tile.v-512  { background: #edc850; color: #f9f6f2; font-size: clamp(1.1rem, 5vw, 1.9rem); }
+.tile.v-1024 { background: #edc53f; color: #f9f6f2; font-size: clamp(0.9rem, 4vw, 1.5rem); }
 
 /* dlaždice 2048 a vyšší — zlaté zvýraznění pro úspěch */
-.cell.v-max  {
+.tile.v-max  {
   background: linear-gradient(135deg, #ffd54f, #ff8f00);
   color: #3a2a00;
   font-size: clamp(0.9rem, 4vw, 1.5rem);
