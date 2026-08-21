@@ -1,0 +1,237 @@
+/* ====== Tenis — vlastní proměnné barev, hra nezávisí na rozcestníku ====== */
+/* box-sizing po hranicích, aby padding/border nepřibíraly na velikostech */
+.tenis-body,
+.tenis-body * {
+  box-sizing: border-box;
+}
+
+.tenis-body {
+  --bg: #0b1220;
+  --bg-panel: #17223a;
+  --border: #273355;
+  --fg: #e6ecff;
+  --accent: #facc15;
+  --p1: #4f8cff;
+  --p2: #ff5c7a;
+  --line: #e6ecff;
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #16204a 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.tenis-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 880px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.tenis-title {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--p1), var(--p2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* krátký popis pravidla */
+.rule-hint {
+  font-size: 0.8rem;
+  color: #9fb2ff;
+  margin-left: auto;
+}
+
+/* hlavní rozložení — hrací pole vedle bočního panelu */
+.tenis-main {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 880px;
+}
+
+/* relativní obal pro hrací pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* canvas hřiště — tmavé pozadí, bílé středové čáry nakreslí JS */
+.tenis-board {
+  display: block;
+  max-width: 100%;
+  background: #050816;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+}
+
+/* boční panel — sloupec se skóre a ovládáním */
+.tenis-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 240px;
+}
+
+/* jednotlivý panel (rámeček) v bočním panelu */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* řádek skóre — popisek vlevo, hodnota vpravo */
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+}
+
+.score-label {
+  color: #9fb2ff;
+  font-size: 0.9rem;
+}
+
+.score-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* zvýraznění hodnot dle hráče (barvy palic) */
+.score-row:nth-child(1) .score-value {
+  color: var(--p1);
+}
+
+.score-row:nth-child(2) .score-value {
+  color: var(--p2);
+}
+
+/* řádek s popiskem „vyhraje první s" */
+.score-row.hint {
+  border-top: 1px solid var(--border);
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+}
+
+/* ovládací tlačítka */
+.ctrl-btn {
+  width: auto;
+  padding: 0.6rem 0.9rem;
+  background: var(--accent);
+  color: #241a02;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* tlačítko v plné šířce panelu */
+.ctrl-btn.full {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+/* nápověda s klávesami obou hráčů */
+.keys-help {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #9fb2ff;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* překryv stavů (pauza / výhra) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(5, 8, 22, 0.78);
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+/* při skrytí overlay (hidden) odpojíme i zobrazení */
+.overlay[hidden] {
+  display: none;
+}
+
+/* patička rozcestníku */
+.tenis-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+}
+
+/* na mobilních zařízeních se pole a panel skládají pod sebe */
+@media (max-width: 640px) {
+  .tenis-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tenis-side {
+    width: 100%;
+    max-width: 420px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .panel {
+    flex: 1 1 160px;
+  }
+}

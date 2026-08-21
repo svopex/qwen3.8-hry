@@ -1,0 +1,416 @@
+// ====== Tenis — logika hry (Pong) ======
+// Klasická arkádová hra: dva hráči ovládají rakety vlevo a vpravo.
+// Míč se odráží od horního/dolního okraje a od raket. Prohře hráč,
+// u kterého míč minul rakotu — soupeř si připsá bod. Vyhrává první s cílem.
+
+// ---- Rozměry hřiště (px, odpovídá canvasu) ----
+const COURT_W = 800;
+const COURT_H = 450;
+
+// ---- Rozměry rakety a míče (px) ----
+const PADDLE_W = 10;    // šířka rakety
+const PADDLE_H = 70;    // výška rakety
+const BALL_R = 7;       // poloměr míče
+
+// ---- Odstup raket od stěn ----
+const PADDLE_MARGIN = 22;
+
+// ---- Rychlosti (px za sekundu, počítáno z dt) ----
+const PADDLE_SPEED = 430;          // rychlost rakety
+const BALL_SPEED_MIN = 300;        // počáteční rychlost míče
+const BALL_SPEED_MAX = 780;        // strop rychlosti míče
+const BALL_ACCEL = 1.05;          // mírné zrychlení po každém úderu raketou
+
+// ---- Cíl hry: první hráč s tolika body vyhrává ----
+const WIN_SCORE = 5;
+
+// ==== Globální stav hry ====
+let left;     // pozice rakety vlevo: {y}
+let right;    // pozice rakety vpravo: {y}
+let ball;     // pozice a směr míče: {x, y, vx, vy}
+let scoreL;   // body hráče vlevo
+let scoreR;   // body hráče vpravo
+let paused;   // je hra v pauze
+let over;     // skončila hra (někdo vyhrál)
+let winner;   // "left" | "right" | null
+let rafId;    // identifikátor animace (requestAnimationFrame)
+let lastTime; // čas posledního kroku
+
+// ==== Odkazy na DOM prvky ====
+const board = document.getElementById("board");
+const ctx = board.getContext("2d");
+const scoreLeftEl = document.getElementById("scoreLeft");
+const scoreRightEl = document.getElementById("scoreRight");
+const targetEl = document.getElementById("target");
+const overlay = document.getElementById("overlay");
+const overlayText = document.getElementById("overlayText");
+const overlayBtn = document.getElementById("overlayBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+// ---- Stav kláves (držená tlačítka) — mění event při stisknutí/uvolnění ----
+// Držená klávesa = true; krok hry čte jen tento stav, takže se pohledavá i
+// při více stisknutých klávesách najednou (např. W + mezerník).
+const keys = {
+  up1: false,    // hráč 1 — nahoru (W)
+  down1: false,  // hráč 1 — dolů (S)
+  up2: false,    // hráč 2 — nahoru (↑)
+  down2: false,  // hráč 2 — dolů (↓)
+};
+
+// ==== Vykreslování ====
+
+// Vykreslí pozadí a bílé přerušované středové čáry.
+function vykresliPozadi() {
+  // pozadí je nastavené v CSS (průhledné canvas), zde jen středové čáry
+  ctx.strokeStyle = "rgba(230,236,255,0.22)";
+  ctx.lineWidth = 3;
+  ctx.setLineDash([14, 16]);
+  ctx.beginPath();
+  ctx.moveTo(COURT_W / 2, 0);
+  ctx.lineTo(COURT_W / 2, COURT_H);
+  ctx.stroke();
+  // obnoví pevný tah pro zbylé objekty
+  ctx.setLineDash([]);
+}
+
+// Vykreslí jednu raketu jako zakulhlený obdélník v dané x a barvě.
+function nakresliRaketu(x, y, fill) {
+  ctx.fillStyle = fill;
+  const r = 5; // poloměr zakulhlení rohů
+  // manuell zakulhlený obdélník (bez roundRect kvůli starším prohlížečům)
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + PADDLE_W, y, x + PADDLE_W, y + PADDLE_H, r);
+  ctx.arcTo(x + PADDLE_W, y + PADDLE_H, x, y + PADDLE_H, r);
+  ctx.arcTo(x, y + PADDLE_H, x, y, r);
+  ctx.arcTo(x, y, x + PADDLE_W, y, r);
+  ctx.closePath();
+  ctx.fill();
+}
+
+// Vykreslí míč jako kruh s jemným zářením.
+function nakresliMic() {
+  // vnější záře
+  ctx.fillStyle = "rgba(250,204,21,0.25)";
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, BALL_R * 1.7, 0, Math.PI * 2);
+  ctx.fill();
+  // jádro míče
+  ctx.fillStyle = "#facc15";
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// Kompletní překreslení scény (pozadí, rakety, míč).
+function vykresli() {
+  ctx.clearRect(0, 0, COURT_W, COURT_H);
+  vykresliPozadi();
+  nakresliRaketu(PADDLE_MARGIN, left.y, "#4f8cff");
+  nakresliRaketu(COURT_W - PADDLE_MARGIN - PADDLE_W, right.y, "#ff5c7a");
+  nakresliMic();
+}
+
+// Aktualizuje skóre v bočním panelu.
+function aktualizujSkore() {
+  scoreLeftEl.textContent = scoreL;
+  scoreRightEl.textContent = scoreR;
+}
+
+// ==== Pomocné omezení rakety na hranice hřiště ====
+function omezY(y) {
+  return Math.max(0, Math.min(COURT_H - PADDLE_H, y));
+}
+
+// ==== Odraz míče od rakety ====
+// Úhel odrazu závisí na tom, v jakém místě rakety míč zasáhl —
+// střed rakety = přímý odraz, okraj = ostrý úhel. To hra dělá hratelnou.
+// Parametr strany: "left" odráží míč doprava, "right" doleva.
+function odraziMictOdRakety(rajcetX, rajcetY, strana) {
+  // výška středu rakety
+  const streduY = rajcetY + PADDLE_H / 2;
+  // výstupek míče přes střed rakety v rozpadu [-1, 1] (0 = střed, ±1 = okraj)
+  const vychyleni = (ball.y - streduY) / (PADDLE_H / 2);
+  // mezí omezíme na [-1, 1], aby okraj nenačetl extrémní úhel
+  const clamped = Math.max(-1, Math.min(1, vychyleni));
+
+  // maximální úhel od svislice (stejně jako u Pingu: ~60°)
+  const maxUhel = (60 * Math.PI) / 180;
+  const uhel = clamped * maxUhel;
+
+  // zrychlí míč po každém úderu (mezi minimem a maximem)
+  const rychlost = Math.min(BALL_SPEED_MAX, Math.hypot(ball.vx, ball.vy) * BALL_ACCEL);
+
+  // směr: "left" → míč doprava (vx > 0), "right" → míč doleva (vx < 0)
+  const predpokladVx = strana === "left" ? 1 : -1;
+
+  // rozložíme rychlost přes úhel; x složka podle směru
+  const nx = predpokladVx * Math.cos(uhel) * rychlost;
+  const ny = Math.sin(uhel) * rychlost;
+
+  ball.vx = nx;
+  ball.vy = ny;
+
+  // míč odrazíme ven z kolize, aby okamžitě nevystřídoval
+  if (strana === "left") {
+    ball.x = rajcetX + PADDLE_W + BALL_R;
+  } else {
+    ball.x = rajcetX - BALL_R;
+  }
+}
+
+// ==== Pomocné: detekce kolize míče s obdélníkem rakety ====
+// Vrací true, pokud se kruh (míč) dotkl obdélníku (rakieta).
+function kolizeRakety(rx, ry) {
+  // nejbližší bod obdélníku k těžišti kruhu
+  const cx = Math.max(rx, Math.min(ball.x, rx + PADDLE_W));
+  const cy = Math.max(ry, Math.min(ball.y, ry + PADDLE_H));
+  const dx = ball.x - cx;
+  const dy = ball.y - cy;
+  return dx * dx + dy * dy <= BALL_R * BALL_R;
+}
+
+// ==== Jeden krok simulace (dílčí časový krok v sekundách) ====
+function krok(dt) {
+  // ---- pohyb raket podle držených kláves ----
+  if (keys.up1) left.y = omezY(left.y - PADDLE_SPEED * dt);
+  if (keys.down1) left.y = omezY(left.y + PADDLE_SPEED * dt);
+  if (keys.up2) right.y = omezY(right.y - PADDLE_SPEED * dt);
+  if (keys.down2) right.y = omezY(right.y + PADDLE_SPEED * dt);
+
+  // ---- pohyb míče ----
+  ball.x += ball.vx * dt;
+  ball.y += ball.vy * dt;
+
+  // odraz od horního a dolního okraje
+  if (ball.y - BALL_R <= 0) {
+    ball.y = BALL_R;
+    ball.vy = Math.abs(ball.vy);
+  } else if (ball.y + BALL_R >= COURT_H) {
+    ball.y = COURT_H - BALL_R;
+    ball.vy = -Math.abs(ball.vy);
+  }
+
+  // ---- detekce bodu: míč minul levý / pravý okraj hřiště ----
+  // míč vyšel zleva → levý hráč minul → bod hráči vpravo
+  if (ball.x + BALL_R <= 0) {
+    zisk("right");
+    return;
+  }
+  // míč vyšel zprava → pravý hráč minul → bod hráči vlevo
+  if (ball.x - BALL_R >= COURT_W) {
+    zisk("left");
+    return;
+  }
+
+  // ---- kolize s raketami ----
+  // levá rakota: odrazí míč, jen když míč letí doleva (vyhýbáváme se podvojení odrazu)
+  if (ball.vx < 0 && kolizeRakety(PADDLE_MARGIN, left.y)) {
+    odraziMictOdRakety(PADDLE_MARGIN, left.y, "left");
+  }
+  // pravá rakota: odrazí míč, jen když míč letí doprava
+  if (ball.vx > 0 && kolizeRakety(COURT_W - PADDLE_MARGIN - PADDLE_W, right.y)) {
+    odraziMictOdRakety(COURT_W - PADDLE_MARGIN - PADDLE_W, right.y, "right");
+  }
+}
+
+// ==== Bod a reset míče ====
+// Hráč "bodyOwner" ("left" | "right") získal bod; míč se servíruje nově
+// směrem ke soupeři (od hráče, který bod inkasoval, odražujeme míč na stranu
+// hráče, který minul — klasický servis na soupeře).
+function zisk(bodyOwner) {
+  if (bodyOwner === "left") scoreL++;
+  else scoreR++;
+  aktualizujSkore();
+
+  // vyhodnotit konec hry dříve, než servisneme
+  if (scoreL >= WIN_SCORE || scoreR >= WIN_SCORE) {
+    winner = scoreL >= WIN_SCORE ? "left" : "right";
+    konecHry();
+    return;
+  }
+
+  // míč servírujeme směrem k hráči, který minul (soupeřovi bodyOwner)
+  // bodyOwner === "left"  → míč letí směrem k pravému hráči  → vx > 0
+  // bodyOwner === "right" → míč letí směrem k levému hráči   → vx < 0
+  resetSirkaMice(bodyOwner === "left" ? "right" : "left");
+}
+
+// ==== Reset míče (servis) po každém bodě ====
+// Parametr "kamLeti" říká, směrem k kterou hráči míč letí ("left" | "right").
+function resetSirkaMice(kamLeti) {
+  // míč v centru hřiště
+  ball.x = COURT_W / 2;
+  ball.y = COURT_H / 2;
+
+  // mírně náhodná svislá složka, aby servis nebyl predikovatelný
+  const vy = (Math.random() - 0.5) * 0.7 * BALL_SPEED_MIN;
+
+  // směr letu podle "kamLeti"
+  const vyraz = kamLeti === "right" ? 1 : -1;
+  // x složku přizpůsobíme tak, aby celková rychlost odpovídala BALL_SPEED_MIN
+  const vx =
+    Math.sqrt(Math.max(0, BALL_SPEED_MIN * BALL_SPEED_MIN - vy * vy)) * vyraz;
+
+  ball.vx = vx;
+  ball.vy = vy;
+  lastTime = performance.now();
+}
+
+// ==== Stav hry ====
+
+// Přepne hru do stavu konce (někdo vyhrál).
+function konecHry() {
+  over = true;
+  const nazev = winner === "left" ? "Hráč 1 (vlevo)" : "Hráč 2 (vpravo)";
+  overlayText.textContent = `Vyhrává ${nazev}!`;
+  overlayBtn.textContent = "Nová hra";
+  pokazHry(true);
+}
+
+// Zobrazení nebo skrytí překryvu stavu.
+function pokazHry(zobrazit) {
+  overlay.hidden = !zobrazit;
+}
+
+// Přepne pauzu; text a tlačítko přizpůsobí.
+function pauza() {
+  if (over) return;
+  paused = true;
+  overlayText.textContent = "Pauza";
+  overlayBtn.textContent = "Pokračovat";
+  pokazHry(true);
+}
+
+// Opustí pauzu a pokračuje.
+function pokracuj() {
+  paused = false;
+  lastTime = performance.now();
+  pokazHry(false);
+  if (!rafId) rafId = requestAnimationFrame(krokAnimace);
+}
+
+// ==== Nová hra ====
+
+// Resetuje hru na počáteční stav — rakety a míč v centru, skóre nula.
+function restart() {
+  // rakety na středu hřiště
+  left = { y: (COURT_H - PADDLE_H) / 2 };
+  right = { y: (COURT_H - PADDLE_H) / 2 };
+
+  // skóre nula
+  scoreL = 0;
+  scoreR = 0;
+
+  // míč v centru, směr letu náhodný (vlevo / vpravo)
+  ball = { x: COURT_W / 2, y: COURT_H / 2, vx: 0, vy: 0 };
+  const vyraz = Math.random() < 0.5 ? 1 : -1;
+  const vy = (Math.random() - 0.5) * 0.6 * BALL_SPEED_MIN;
+  const vx =
+    Math.sqrt(Math.max(0, BALL_SPEED_MIN * BALL_SPEED_MIN - vy * vy)) * vyraz;
+  ball.vx = vx;
+  ball.vy = vy;
+
+  // stav hry — běží, nikdo nevyhrál
+  paused = false;
+  over = false;
+  winner = null;
+
+  // vyčisti stav kláves, aby se hra hned nehýbala
+  keys.up1 = keys.down1 = keys.up2 = keys.down2 = false;
+
+  aktualizujSkore();
+  vykresli();
+  pokazHry(false);
+  lastTime = performance.now();
+}
+
+// ==== Hlavní animace ====
+// Číselný krok (dt) se počítá jako rozdíl mezi dvěma rády tak,
+// aby fyzika běhávala stejně rychle nezávisle na FPS monitoru.
+function krokAnimace() {
+  const ted = performance.now();
+  let dt = (ted - lastTime) / 1000; // převedení na sekundy
+  // bezpečný strop pro dt např. po návratu z pauzy nebo ztraceném okně
+  if (dt > 0.05) dt = 0.05;
+  lastTime = ted;
+
+  if (!paused && !over) {
+    krok(dt);
+  }
+
+  vykresli();
+
+  if (!over) {
+    rafId = requestAnimationFrame(krokAnimace);
+  } else {
+    rafId = null;
+  }
+}
+
+// ==== Ovládání ====
+
+// Klávesové ovládání — pro jednoho a druhého hráče.
+function naKlavesy(e, poloha) {
+  const klice = e.key.toLowerCase();
+
+  // mezerník / P = pauza nebo pokračování (obojí hráči)
+  if (e.key === " " || klice === "p") {
+    if (over) return;
+    if (paused) pokracuj();
+    else pauza();
+    e.preventDefault();
+    return;
+  }
+
+  // R = nová hra (kdykoliv)
+  if (klice === "r") {
+    restart();
+    if (!rafId) rafId = requestAnimationFrame(krokAnimace);
+    e.preventDefault();
+    return;
+  }
+
+  // klávesy pohyb — mění jen držený stav, krok animace ho potom počítá
+  if (klice === "w") keys.up1 = poloha;
+  else if (klice === "s") keys.down1 = poloha;
+  else if (e.key === "ArrowUp") keys.up2 = poloha;
+  else if (e.key === "ArrowDown") keys.down2 = poloha;
+
+  // šipky / mezerník neměly by scrollovat stránku
+  if ([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault();
+  }
+}
+
+// ==== Spojení událostí ====
+document.addEventListener("keydown", (e) => naKlavesy(e, true));
+document.addEventListener("keyup", (e) => naKlavesy(e, false));
+
+pauseBtn.addEventListener("click", () => {
+  if (over) return;
+  if (paused) pokracuj();
+  else pauza();
+});
+
+overlayBtn.addEventListener("click", () => {
+  if (over) {
+    restart();
+    rafId = requestAnimationFrame(krokAnimace);
+  } else if (paused) {
+    pokracuj();
+  }
+});
+
+restartBtn.addEventListener("click", () => {
+  restart();
+  if (!rafId) rafId = requestAnimationFrame(krokAnimace);
+});
+
+// ==== Spouštění ====
+document.addEventListener("DOMContentLoaded", () => {
+  targetEl.textContent = WIN_SCORE;
+  restart();
+  rafId = requestAnimationFrame(krokAnimace);
+});

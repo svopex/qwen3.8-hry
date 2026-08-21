@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenis</title>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="tenis-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="tenis-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="tenis-title">Tenis</h1>
+    <span class="rule-hint">Dva hráči — klasická arkádová střídavá výměna míčku.</span>
+  </header>
+
+  <main class="tenis-main">
+    <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (pauza/výhra) -->
+    <div class="board-wrap">
+      <!-- herní pole — rozměr canvasu odpovídá rozloze hřiště (poměr 16:9) -->
+      <canvas id="board" class="tenis-board" width="800" height="450" aria-label="Herní pole Tenisu"></canvas>
+
+      <!-- stavy hry (pauza / konec) — překryv přes herní pole, skrytý když nepotřebujeme -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Pauza</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Pokračovat</button>
+      </div>
+    </div>
+
+    <!-- boční panel se skóre a ovládáním obou hráčů -->
+    <aside class="tenis-side">
+      <!-- panel se skóre obou hráčů -->
+      <section class="panel stats-panel" aria-label="Skóre">
+        <div class="score-row">
+          <span class="score-label">Hráč 1 (vlevo)</span>
+          <span class="score-value" id="scoreLeft">0</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Hráč 2 (vpravo)</span>
+          <span class="score-value" id="scoreRight">0</span>
+        </div>
+        <div class="score-row hint">
+          <span class="score-label">Vyhraje první s</span>
+          <span class="score-value" id="target">5</span>
+        </div>
+      </section>
+
+      <!-- ovládací prvky — klikací alternativy k klávesnici + popis kláves -->
+      <section class="panel controls-panel" aria-label="Ovládání">
+        <button type="button" id="pauseBtn" class="ctrl-btn full">Pauza</button>
+        <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
+        <p class="keys-help">
+          <strong>Hráč 1:</strong> W / S<br>
+          <strong>Hráč 2:</strong> ↑ / ↓ (šipky)<br>
+          mezerník = pauza,<br>
+          R = nová hra
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <!-- patička s odkazem na hlavní stránku rozcestníku -->
+  <footer class="tenis-footer">
+    <small>© 2026 Herní rozcestník</small>
+  </footer>
+</body>
+</html>

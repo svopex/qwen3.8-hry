@@ -32,6 +32,12 @@ const HERY = [
     ikona: "⚪",
     href: "pente/index.html",
   },
+  {
+    nazev: "Tenis",
+    popis: "Klasická arkádová hra — dva hráči si palici pingají míček.",
+    ikona: "🎾",
+    href: "tenis/index.html",
+  },
   // další hry se přidávají sem, např.:
   // { nazev: "Paměť", popis: "Převoj dvojic karet.", ikona: "🃏", href: "pamet/index.html" },
 ];
