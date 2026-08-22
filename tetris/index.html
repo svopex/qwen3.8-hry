@@ -32,18 +32,18 @@
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Z horního okraje pole neustále padají kúsky tvořené 4 kostkami (I, O, T, S, Z, J, L).</li>
-        <li>Kús můžete posouvat doleva/doprava, otáčet a spěšovat dolů.</li>
-        <li>Když se dopadne, zafixuje se a ze dna pole se objeví další kús.</li>
+        <li>Z horního okraje pole neustále padají kusy tvořené ze 4 kostek (I, O, T, S, Z, J, L).</li>
+        <li>Kus můžete posouvat doleva/doprava, otáčet a rychle spouštět dolů.</li>
+        <li>Když se dopadne, zafixuje se a z horního okraje se objeví další kus.</li>
         <li>Plně obsazený řádek se smaže — získáte body (100/300/500/800 × úroveň).</li>
-        <li>Hra končí, když se nový kús už nemůže umístit (hromada dosáhne střechy).</li>
+        <li>Hra končí, když nový kus už nemůžete umístit (hromada dosáhne střechy).</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>← → — pohyb kúsku vlevo/vpravo</li>
+        <li>← → — pohyb kusu vlevo/vpravo</li>
         <li>↑ — rotace</li>
-        <li>↓ — spěch (rychlejší pád, +1 bod)</li>
+        <li>↓ — rychlé spuštění dolů (+1 bod)</li>
         <li>Mezerník — okamžitý pád na dno (+2 body za buňku)</li>
         <li>P — pauza / pokračování</li>
         <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em> — klikací alternativy</li>
@@ -52,7 +52,7 @@
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
         <li>Hrací pole je pevné 10 × 20 polí.</li>
-        <li>Kúsky se vybírají spravedlivým „7-bag" generátorem (vždy všech 7 tvarů v sadě).</li>
+        <li>Kusy se vybírají spravedlivým „7-bag" generátorem (vždy všech 7 tvarů v sadě).</li>
         <li>Úroveň stoupá každých 10 přeskupených řádků a zvyšuje rychlost pádu (max. úroveň 15).</li>
         <li>V panelu <em>Příští kus</em> vidíte, co padne jako další.</li>
       </ul>
@@ -80,10 +80,10 @@
 
     <!-- boční panel s informacemi a ovládáním -->
     <aside class="tetris-side">
-      <!-- panel s náhledem příštího kúsku -->
+      <!-- panel s náhledem příštího kusu -->
       <section class="panel next-panel" aria-label="Příští kus">
         <h2 class="panel-title">Příští kus</h2>
-        <canvas id="next" class="tetris-next" width="90" height="90" aria-label="Náhled příštího kúsku"></canvas>
+        <canvas id="next" class="tetris-next" width="90" height="90" aria-label="Náhled příštího kusu"></canvas>
       </section>
 
       <!-- panel se statistiky hry -->
@@ -109,7 +109,7 @@
         <p class="keys-help">
           <strong>Ovládání:</strong><br>
           ← → pohyb, ↑ rotace,<br>
-          ↓ spěš, mezerník = pád
+          ↓ rychlý pád, mezerník = pád na dno
         </p>
       </section>
     </aside>
