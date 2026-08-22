@@ -1,10 +1,12 @@
-// ====== DÁMA — logika hry (mezinárodní dámy na poli 8 × 8) ======
+// ====== DÁMA — logika hry (česká dáma na poli 8 × 8) ======
 // Hraje se na šachovnici 8 × 8, kameny stojí jen na tmavých polích.
 // Hráč (černé kameny) je dole, počítač (bílé kameny) nahoře.
 // Pravidla:
-//   - obyčejný kámen chodí diagonálně dopředu;
+//   - obyčejný kámen chodí i bere diagonálně jen dopředu;
 //   - skok přes soupeřův kámen je POVINNÝ;
 //   - po skoku stejný kámen musí pokračovat, dokud už dál skočit nemůže;
+//   - přeskočené kameny se z desky odebírají až po dokončení celého řetězce,
+//     do té doby na desce překážejí a nelze je přeskočit podruhé;
 //   - na poslední řadě se kámen promění v dámu;
 //   - dáma kluzem letí libovolně daleko diagonálně (všemi směry);
 //   - vyhrává, kdo zničí všechny soupeřovy kameny nebo mu znemožní tah.
