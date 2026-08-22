@@ -1,0 +1,376 @@
+/* ====== Karetní pexeso — vlastní proměnné barev, aby hra nezávisela na rozcestníku ====== */
+.gpex-body,
+.gpex-body * {
+  box-sizing: border-box;
+}
+
+.gpex-body {
+  --bg: #0b1020;
+  --bg-panel: #1b2340;
+  --border: #2b3561;
+  --fg: #e6ecff;
+  --accent: #4f8cff;
+  --card-back: #2a3458;
+  --card-face: #f9f6f2;
+  --card-face-fg: #1e293b;
+  --match: #22c55e;
+
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #16204a 0%, var(--bg) 70%);
+  color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2rem;
+}
+
+/* hlavička s názvem hry a odkazem zpět */
+.gpex-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.back-link:hover {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.gpex-title {
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #34d399, #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hlavní rozložení — sloupec uprostřed */
+.gpex-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+}
+
+/* horní lišta se statistikami a tlačítkem nové hry */
+.hud {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* jeden ukazatel (tahy / dvojice / rekord) — tmavý displej */
+.hud-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 90px;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9fb2ff;
+}
+
+.hud-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* tlačítko nové hry v liště */
+.ctrl-btn {
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: #06102a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.ctrl-btn:hover {
+  filter: brightness(1.1);
+}
+
+.ctrl-btn:active {
+  transform: translateY(1px);
+}
+
+/* krátké pravidlo hry nad polem */
+.rule-help {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9fb2ff;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* lišta s výběrem velikosti pole — popisek + skupina přepínacích tlačítek */
+.size-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* popisek skupiny tlačítek (např. „Velikost pole") */
+.size-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9fb2ff;
+  margin-right: 0.25rem;
+}
+
+/* jedno tlačítko velikosti — neutrální rámeček, aktivní stav zvýrazněný akcentem */
+.size-btn {
+  padding: 0.45rem 0.9rem;
+  background: var(--bg-panel);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.size-btn:hover {
+  border-color: var(--accent);
+}
+
+/* aktivní velikost — plný akcent pro jasný odlišení od ostatních */
+.size-btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: #06102a;
+  border-color: var(--accent);
+}
+
+/* relativní obal pro hrací pole + překryv stavů */
+.board-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* hrací pole — mřížka karet; počet sloupců řídí proměnná --gpex-col (nastaví JS) */
+.gpex-pole {
+  --gpex-col: 4; /* výchozí 4 sloupce; změna velikosti pole přepíše tuto hodnotu */
+  display: grid;
+  grid-template-columns: repeat(var(--gpex-col), minmax(0, 1fr));
+  gap: 8px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+}
+
+/* prázdná buňka (při lichém počtu karet, např. 5×5) — zachová rozměr mřížky */
+.gpex-prazdno {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--card-back) 40%, transparent);
+}
+
+/* počet sloupců podle zvolené velikosti pole (JS nastaví data-velikost) */
+.gpex-pole[data-velikost="4"] { --gpex-col: 4; }
+.gpex-pole[data-velikost="5"] { --gpex-col: 5; }
+.gpex-pole[data-velikost="6"] { --gpex-col: 6; }
+
+/* u největšího pole jsou karty menší — symbol zmenšíme, aby do karty vešel */
+.gpex-pole[data-velikost="6"] .gpex-rub,
+.gpex-pole[data-velikost="6"] .gpex-lice {
+  font-size: clamp(1.2rem, 5vw, 2rem);
+}
+
+/* jedna karta — perspektiva pro 3D otočení a klikací plocha */
+.gpex-karta {
+  aspect-ratio: 1 / 1;
+  perspective: 600px; /* hloubka 3D scény pro plynulé otočení */
+  cursor: pointer;
+  outline: none;
+}
+
+.gpex-karta:focus-visible .gpex-otocka {
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+/* vnitřní element, který se otáčí v prostoru (rotateY) */
+.gpex-otocka {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+/* odvrácená karta se otočí o 180° a ukáže líce */
+.gpex-karta.gpex-odkrita .gpex-otocka {
+  transform: rotateY(180deg);
+}
+
+/* společné vlastnosti obou stran karty */
+.gpex-rub,
+.gpex-lice {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden; /* skryje stranu otočenou od pozorovatele */
+  border-radius: 10px;
+  font-size: clamp(1.6rem, 7vw, 2.6rem);
+  user-select: none;
+}
+
+/* rub karty — tmavé pozadí s otazníkem */
+.gpex-rub {
+  background: var(--card-back);
+  border: 1px solid var(--border);
+  color: #9fb2ff;
+}
+
+/* líce karty — světlé pozadí se symbolem */
+.gpex-lice {
+  background: var(--card-face);
+  color: var(--card-face-fg);
+  transform: rotateY(180deg); /* předtočeno, aby se po otočení zobrazilo správně */
+}
+
+/* nalezená dvojice — zelený rámeček jako potvrzení správného tahu */
+.gpex-karta.gpex-spravna .gpex-lice {
+  box-shadow: inset 0 0 0 3px var(--match);
+}
+
+/* nalezená dvojice ztratí kurzor myši (už se nedá znovu odvrátit) */
+.gpex-karta.gpex-spravna {
+  cursor: default;
+}
+
+/* překryv stavů (výhra) nad herním polem */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(5, 8, 22, 0.78);
+  border-radius: 14px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-text {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+/* při skrytí overlay (hidden) odpojíme i zobrazení */
+.overlay[hidden] {
+  display: none;
+}
+
+/* nápověda s ovládáním pod polem */
+.keys-help {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9fb2ff;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* patička rozcestníku */
+.gpex-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* každý řádek v patičce na samostatném řádku */
+.gpex-footer small {
+  display: block;
+}
+
+/* ====== Světlý motiv karetního pexesa (aktivuje se přes html[data-motiv="svetly"]) ====== */
+/* Přepíšeme barevné proměnné na světlou paletu; líce karet si drží vlastní barvy. */
+html[data-motiv="svetly"] .gpex-body {
+  --bg: #eef2f8;
+  --bg-panel: #ffffff;
+  --border: #cbd5e1;
+  --fg: #1e293b;
+  --accent: #2563eb;
+  --card-back: #dbe2ec;
+  --card-face: #ffffff;
+  --card-face-fg: #1e293b;
+}
+
+/* světlé pozadí stránky a viditelná plocha hracího pole */
+html[data-motiv="svetly"] .gpex-body {
+  background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 70%);
+}
+
+/* nadpis — tmavší gradient pro čitelnost na světlém pozadí */
+html[data-motiv="svetly"] .gpex-title {
+  background: linear-gradient(90deg, #059669, #1d4ed8);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* popisky ukazatelů a nápovědy — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .hud-label,
+html[data-motiv="svetly"] .rule-help,
+html[data-motiv="svetly"] .keys-help {
+  color: #475569;
+}
+
+/* rub karty ve světlém motivu — světlejší tón s tmavším otazníkem */
+html[data-motiv="svetly"] .gpex-rub {
+  color: #64748b;
+}
+
+/* překryv stavů — světlé poloprůhledné místo tmavého */
+html[data-motiv="svetly"] .overlay {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* tlačítko akcentu — bílý text zůstává čitelný i na světlém motivu */
+html[data-motiv="svetly"] .ctrl-btn {
+  color: #ffffff;
+}

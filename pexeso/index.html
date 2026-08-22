@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karetní pexeso</title>
+  <!-- společný přepínač motivu (tmavý / světlý) — skript běží synchronně, aby motiv platil i před vykreslením těla -->
+  <link rel="stylesheet" href="../theme.css">
+  <script src="../theme.js"></script>
+  <!-- externí styl hry místo inline style -->
+  <link rel="stylesheet" href="style.css">
+  <!-- externí JS s logikou hry místo inline skriptu -->
+  <script src="js.js" defer></script>
+</head>
+<body class="gpex-body">
+  <!-- hlavička s návratem do rozcestníku -->
+  <header class="gpex-header">
+    <a class="back-link" href="../index.html">← Zpět do menu</a>
+    <h1 class="gpex-title">Karetní pexeso</h1>
+  </header>
+
+  <main class="gpex-main">
+    <!-- horní lišta se statistikami a tlačítkem nové hry -->
+    <div class="hud">
+      <div class="hud-box" aria-label="Počet tahů">
+        <span class="hud-label">Tahy</span>
+        <span class="hud-value" id="tahy">0</span>
+      </div>
+
+      <div class="hud-box" aria-label="Nalezené dvojice">
+        <span class="hud-label">Dvojice</span>
+        <span class="hud-value" id="dvojice">0 / 8</span>
+      </div>
+
+      <div class="hud-box" aria-label="Nejlepší výkon (nejméně tahů)">
+        <span class="hud-label">Rekord</span>
+        <span class="hud-value" id="rekord">–</span>
+      </div>
+
+      <button type="button" id="restartBtn" class="ctrl-btn" title="Nová hra">Nová hra</button>
+    </div>
+
+    <!-- krátké pravidlo hry nad polem -->
+    <p class="rule-help">
+      Odvracej karty po dvou a najdi všechny <strong>dvojice</strong> stejných symbolů.
+    </p>
+
+    <!-- volba velikosti hracího pole — hráč si tlačítkem vybere obtížnost -->
+    <div class="size-select" role="group" aria-label="Velikost hracího pole">
+      <span class="size-label">Velikost pole</span>
+      <button type="button" class="size-btn" data-velikost="4">4×4</button>
+      <button type="button" class="size-btn" data-velikost="5">5×5</button>
+      <button type="button" class="size-btn" data-velikost="6">6×6</button>
+    </div>
+
+    <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavu výhry -->
+    <div class="board-wrap">
+      <!-- hrací pole: karty se generují v js.js, každá má rub a líce se symbolem -->
+      <div id="pole" class="gpex-pole" role="grid" aria-label="Hrací pole karetního pexesa"></div>
+
+      <!-- stav výhry — překryv přes hrací pole, skrytý dokud hra neskončí -->
+      <div class="overlay" id="overlay" hidden>
+        <p class="overlay-text" id="overlayText">Všechny dvojice nalezeny!</p>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+      </div>
+    </div>
+
+    <!-- nápověda s ovládáním pod polem -->
+    <p class="keys-help">
+      <strong>Ovládání:</strong> klikni na kartu, aby se odvrátila; najdi její dvojici.
+    </p>
+  </main>
+
+  <!-- patička s autorskou poznámkou -->
+  <footer class="gpex-footer">
+    <small>© 2026 R-Bit Technology, s.r.o. Všechny hry vytvořil AI model Qwen 3.8 27B na grafické kartě AMD Radeon RX 7900 XTX 24GB.</small>
+    <small>Hry "naprogramoval" na svém domácím PC Petr "Svopex" Svoboda.</small>
+  </footer>
+</body>
+</html>

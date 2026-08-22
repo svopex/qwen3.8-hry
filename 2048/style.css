@@ -265,6 +265,12 @@
   margin-top: auto;
   padding-top: 2rem;
   color: #64748b;
+  text-align: center;
+}
+
+/* každý řádek v patičce na samostatném řádku */
+.g2048-footer small {
+  display: block;
 }
 
 /* ====== Světlý motiv 2048 (aktivuje se přes html[data-motiv="svetly"]) ====== */

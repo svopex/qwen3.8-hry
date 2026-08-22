@@ -215,6 +215,12 @@
   margin-top: auto;
   padding-top: 2rem;
   color: #64748b;
+  text-align: center;
+}
+
+/* každý řádek v patičce na samostatném řádku */
+.tenis-footer small {
+  display: block;
 }
 
 /* na mobilních zařízeních se pole a panel skládají pod sebe */

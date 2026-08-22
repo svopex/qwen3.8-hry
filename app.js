@@ -50,8 +50,14 @@ const HERY = [
     ikona: "🔢",
     href: "2048/index.html",
   },
+  {
+    nazev: "Karetní pexeso",
+    popis: "Odvracej karty po dvou a najdi všechny dvojice stejných symbolů.",
+    ikona: "🃏",
+    href: "pexeso/index.html",
+  },
   // další hry se přidávají sem, např.:
-  // { nazev: "Paměť", popis: "Převoj dvojic karet.", ikona: "🃏", href: "pamet/index.html" },
+  // { nazev: "Rebus", popis: "Vyhádej slovo z obrázku.", ikona: "🧩", href: "rebus/index.html" },
 ];
 
 // Vykreslí všechny karty do kontejneru menuGrid

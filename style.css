@@ -107,6 +107,11 @@ body.menu-body {
   text-align: center;
 }
 
+/* každý řádek v patičce na samostatném řádku */
+.menu-footer small {
+  display: block;
+}
+
 /* autorská poznámka o AI modelu — jemnější odstín pod autorským řádkem */
 .menu-credit {
   display: block;

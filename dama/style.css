@@ -333,6 +333,12 @@
   margin-top: auto;
   padding-top: 2rem;
   color: #7a6238;
+  text-align: center;
+}
+
+/* každý řádek v patičce na samostatném řádku */
+.dama-footer small {
+  display: block;
 }
 
 /* na úzkých zařízeních zmenšíme políčka a mezery */
