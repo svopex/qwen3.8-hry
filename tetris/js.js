@@ -295,9 +295,9 @@ function posunKoniec() {
     konecHry();
     return;
   }
-  // nový kús z fronty — ten se rovná novému aktuálnímu kúsku
-  const typ = nextTyp();
-  // příštím se stává další kus z fronty (pro náhled)
+  // nový kús = ten, který byl zobrazen v náhledu, aby náhled odpovídal realitě
+  const typ = pristi;
+  // do náhledu doplníme další kus z fronty
   pristi = nextTyp();
   nastaviNovyKusk(typ);
   // hra končí, když se nový kús zrodí v kolizi s existujícími kusy (hromada dosáhla střechy)
