@@ -147,28 +147,27 @@
   padding-top: 0.6rem;
 }
 
-/* nastavení hry — režim a obtížnost vedle sebe, aby se vešla do úzkého panelu */
-.settings-row {
+/* nastavení hry — režim a obtížnost jako skupiny tlačítek pod sebou (sloupec) */
+.settings {
   display: flex;
-  gap: 0.6rem;
+  flex-direction: column;
+  gap: 0.55rem;
   margin-bottom: 0.75rem;
 }
 
-/* jednotlivé políčko — popisek nad selectem (sloupec), aby šlo dát vedle sebe */
-.setting {
+/* jedna skupina — popisek nad horizontálním řádkem tlačítek */
+.setting-group {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  flex: 1 1 0;
-  min-width: 0; /* umožní selectu se smrsknout, aby se vešel vedle druhého */
 }
 
-/* skrytá volba obtížnosti (dvouhra) — explicitní display:flex by přebil hidden */
-.setting[hidden] {
+/* skrytá skupina obtížnosti (dvouhra) — explicitní display:flex by přebil hidden */
+.setting-group[hidden] {
   display: none;
 }
 
-/* popisek nad selectem (Režim / Obtížnost) */
+/* popisek nad řádkem tlačítek (Režim / Obtížnost) */
 .setting-label {
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -176,24 +175,37 @@
   color: #9fb2ff;
 }
 
-/* select s volbou — neutrální rámeček, compact, aby se vešel do úzkého panelu */
-.setting-select {
-  width: 100%;
-  padding: 0.4rem 0.4rem;
+/* horizontální řádek segmentových tlačítek — při nedostatku místa se láme do dalšího řádku */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* segmentové tlačítko — kompaktní výška, aby box nerostl svisle */
+.seg-btn {
+  padding: 0.35rem 0.65rem;
   background: var(--bg-panel);
   color: var(--fg);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.setting-select:hover,
-.setting-select:focus {
+.seg-btn:hover,
+.seg-btn:focus {
   border-color: var(--accent);
   outline: none;
+}
+
+/* vybrané (aktivní) tlačítko — akcentová barva jako u ovládacích tlačítek */
+.seg-btn.active {
+  background: var(--accent);
+  color: #241a02;
+  border-color: var(--accent);
 }
 
 /* ovládací tlačítka */

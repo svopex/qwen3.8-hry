@@ -53,30 +53,31 @@
 
       <!-- ovládací prvky — klikací alternativy k klávesnici + popis kláves -->
       <section class="panel controls-panel" aria-label="Ovládání">
-        <!-- nastavení hry — režim a obtížnost vedle sebe (selecty se vejdou do úzkého panelu) -->
-        <div class="settings-row">
+        <!-- nastavení hry — režim a obtížnost jako skupiny tlačítek vedle sebe (horizontálně) -->
+        <div class="settings">
           <!-- volba režimu: dva hráči u jednoho klávesnice, nebo proti počítači -->
-          <label class="setting">
+          <div class="setting-group">
             <span class="setting-label">Režim</span>
-            <select id="modeSelect" class="setting-select">
-              <option value="dvouhra">Dva hráči</option>
-              <option value="pocitac">Počítač</option>
-            </select>
-          </label>
+            <div class="btn-row" id="modeBtns" role="group" aria-label="Režim">
+              <button type="button" class="seg-btn" data-rezim="dvouhra">Dva hráči</button>
+              <button type="button" class="seg-btn" data-rezim="pocitac">Počítač</button>
+            </div>
+          </div>
 
-          <!-- obtížnost počítače — viditelná jen v režimu „Počítač" (skrytou ji JS) -->
-          <label class="setting" id="diffWrap" hidden>
+          <!-- obtížnost počítače — viditelná jen v režimu „Počítač" (skrytou ji JS);
+               7 tlačítek se vejde do jednoho řádku, při nedostatku místa se láme do dvou -->
+          <div class="setting-group" id="diffWrap" hidden>
             <span class="setting-label">Obtížnost</span>
-            <select id="diffSelect" class="setting-select">
-              <option value="lehky">Lehký</option>
-              <option value="mirny">Mírný</option>
-              <option value="stredni" selected>Střední</option>
-              <option value="pokrocily">Pokročilý</option>
-              <option value="expert">Expert</option>
-              <option value="mistr">Mistr</option>
-              <option value="obtizny">Obtížný</option>
-            </select>
-          </label>
+            <div class="btn-row" id="diffBtns" role="group" aria-label="Obtížnost">
+              <button type="button" class="seg-btn" data-obtiznost="lehky">Lehký</button>
+              <button type="button" class="seg-btn" data-obtiznost="mirny">Mírný</button>
+              <button type="button" class="seg-btn" data-obtiznost="stredni">Střední</button>
+              <button type="button" class="seg-btn" data-obtiznost="pokrocily">Pokročilý</button>
+              <button type="button" class="seg-btn" data-obtiznost="expert">Expert</button>
+              <button type="button" class="seg-btn" data-obtiznost="mistr">Mistr</button>
+              <button type="button" class="seg-btn" data-obtiznost="obtizny">Obtížný</button>
+            </div>
+          </div>
         </div>
 
         <button type="button" id="pauseBtn" class="ctrl-btn full">Pauza</button>

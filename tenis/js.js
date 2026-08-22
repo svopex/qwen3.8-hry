@@ -80,9 +80,9 @@ const overlayText = document.getElementById("overlayText");
 const overlayBtn = document.getElementById("overlayBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const restartBtn = document.getElementById("restartBtn");
-// selecty pro volbu režimu (dvouhra / počítač) a obtížnosti počítače
-const modeSelect = document.getElementById("modeSelect");
-const diffSelect = document.getElementById("diffSelect");
+// kontejnery segmentových tlačítek pro režim a obtížnost počítače
+const modeBtns = document.getElementById("modeBtns");
+const diffBtns = document.getElementById("diffBtns");
 // popisek pravého hráče — v režimu počítač se zobrazí „Počítač"
 const scoreRightLabel = document.getElementById("scoreRightLabel");
 // obal s možností změny obtížnosti — skrytý, když hraje dvouhra
@@ -534,17 +534,26 @@ window.addEventListener("hry:motiv", () => {
 
 // ==== Režim hry a obtížnost počítače ====
 
+// Označí aktivní tlačítko v řádku segmentových tlačítek podle datové hodnoty.
+// Parametry: rijek (kontejner .btn-row), atribut ("rezim" | "obtiznost"), hodnota.
+function oznacAktivniTlacitko(rijek, atribut, hodnota) {
+  rijek.querySelectorAll(".seg-btn").forEach((tl) => {
+    tl.classList.toggle("active", tl.dataset[atribut] === hodnota);
+  });
+}
+
 // Přepne režim hry a podle něj ukáže/ukryje volbu obtížnosti.
 // Po změně režimu se hra okamžitě restartuje, aby platil nový nastavený režim.
 function zmenaRezimu(novyRezim) {
   rezim = novyRezim;
 
-  // select si po výběru ponechá fokus — odebereme ho, aby klávesy W/S/šipky
-  // během hry ovládaly jen rakety a nehodily select na jinou položku
-  modeSelect.blur();
+  // označí nové aktivní tlačítko režimu
+  oznacAktivniTlacitko(modeBtns, "rezim", novyRezim);
 
   // obtížnost má smysl jen proti počítači — jinak je volba skrytá
   diffWrap.hidden = novyRezim !== REZIM_POCITAC;
+  // když se obtížnost zobrazí, označíme její aktuálně platné tlačítko
+  if (!diffWrap.hidden) oznacAktivniTlacitko(diffBtns, "obtiznost", obtiznost);
 
   // název pravého hráče podle režimu
   scoreRightLabel.textContent =
@@ -559,9 +568,8 @@ function zmenaRezimu(novyRezim) {
 function zmenaObtiznosti(novaObtiznost) {
   obtiznost = novaObtiznost;
 
-  // select si po výběru ponechá fokus — odebereme ho, aby následné stisknutí
-  // klávesy (S/W/šipka) nehodilo obtížnost zpět a ovládalo jen raketu
-  diffSelect.blur();
+  // označí nové aktivní tlačítko obtížnosti
+  oznacAktivniTlacitko(diffBtns, "obtiznost", novaObtiznost);
 
   // cílovou polohu rakety nastavíme do středu a rozhodnutí znějeme,
   // aby nový let míče byl posouzen podle nové obtížnosti
@@ -569,16 +577,29 @@ function zmenaObtiznosti(novaObtiznost) {
   aiRozhodnuto = false;
 }
 
-// propojení selectů — změna hodnoty okamžitě přepne režim / obtížnost
-modeSelect.addEventListener("change", () => zmenaRezimu(modeSelect.value));
-diffSelect.addEventListener("change", () => zmenaObtiznosti(diffSelect.value));
+// propojení tlačítek — klik okamžitě přepne režim / obtížnost
+// (e.target.closest najde tlačítko i při kliknutí na vnitřní text)
+modeBtns.addEventListener("click", (e) => {
+  const tl = e.target.closest(".seg-btn");
+  if (!tl) return;
+  // odebereme fokus, aby mezerník/Enter (pauza) neproběhlo jako další klik na tlačítko
+  tl.blur();
+  zmenaRezimu(tl.dataset.rezim);
+});
+diffBtns.addEventListener("click", (e) => {
+  const tl = e.target.closest(".seg-btn");
+  if (!tl) return;
+  // odebereme fokus, aby mezerník/Enter (pauza) neproběhlo jako další klik na tlačítko
+  tl.blur();
+  zmenaObtiznosti(tl.dataset.obtiznost);
+});
 
 // ==== Spouštění ====
 document.addEventListener("DOMContentLoaded", () => {
   targetEl.textContent = WIN_SCORE;
 
-  // výchozí režim je dvouhra — volbu obtížnosti skryjeme
-  modeSelect.value = rezim;
+  // výchozí režim je dvouhra — označíme jeho tlačítko a volbu obtížnosti skryjeme
+  oznacAktivniTlacitko(modeBtns, "rezim", rezim);
   diffWrap.hidden = true;
 
   restart();
