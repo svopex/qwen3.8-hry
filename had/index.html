@@ -7,12 +7,55 @@
   <!-- společný přepínač motivu (tmavý / světlý) — skript běží synchronně, aby motiv platil i před vykreslením těla -->
   <link rel="stylesheet" href="../theme.css">
   <script src="../theme.js"></script>
+  <!-- společné info okno: styly tlačítka a modálního dialogu s popisem hry -->
+  <link rel="stylesheet" href="../info.css">
   <!-- externí styl hry místo inline style -->
   <link rel="stylesheet" href="style.css">
   <!-- externí JS s logikou hry místo inline skriptu -->
   <script src="js.js" defer></script>
+  <!-- společné info okno: logika otevírání/zavírání modálního dialogu -->
+  <script src="../info.js" defer></script>
 </head>
 <body class="snake-body">
+  <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+
+  <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
+  <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+    <div class="info-panel">
+      <div class="info-head">
+        <h2 class="info-title" id="infoTitle">🐍 Had</h2>
+        <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
+      </div>
+
+      <p>Klasický had — řídíte směr pohybu, sbíráte zrno a had roste. Zvláštnost této verze: stěny jsou průchozí, takže při narážení do zdi had vynoří na opačné straně pole.</p>
+
+      <h3 class="info-section">Pravidla</h3>
+      <ul class="info-list">
+        <li>Had se neustále pohybuje dopředu po mřížce 20 × 20.</li>
+        <li>Požijete-li zrno, had poroste o jeden segment a získáte bod.</li>
+        <li>S každým zrnem hra zrychluje (stoupá úroveň rychlosti).</li>
+        <li>Narazíte-li do stěny, had projde a vynoří se na opačné straně.</li>
+        <li>Jediný způsob prohry je srážka s vlastním tělem.</li>
+      </ul>
+
+      <h3 class="info-section">Ovládání</h3>
+      <ul class="info-list">
+        <li>Šipky nebo WASD — změna směru</li>
+        <li>Mezerník / P — pauza / pokračování</li>
+        <li>R — nová hra</li>
+        <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em> a mobilní směrové tlačítko (D-pad)</li>
+      </ul>
+
+      <h3 class="info-section">Nastavení hry</h3>
+      <ul class="info-list">
+        <li>Pole je pevné 20 × 20 polí a stěny jsou průchozí.</li>
+        <li>Rychlost začíná pomalu a s každým zrnem se zvyšuje (do nastaveného stropu).</li>
+        <li>Rekord (nejvíce zrn) se ukládá do prohlížeče a přežije zavření stránky.</li>
+      </ul>
+    </div>
+  </div>
+
   <!-- hlavička s návratem do rozcestníku -->
   <header class="snake-header">
     <a class="back-link" href="../index.html">← Zpět do menu</a>

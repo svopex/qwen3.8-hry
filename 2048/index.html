@@ -7,12 +7,54 @@
   <!-- společný přepínač motivu (tmavý / světlý) — skript běží synchronně, aby motiv platil i před vykreslením těla -->
   <link rel="stylesheet" href="../theme.css">
   <script src="../theme.js"></script>
+  <!-- společné info okno: styly tlačítka a modálního dialogu s popisem hry -->
+  <link rel="stylesheet" href="../info.css">
   <!-- externí styl hry místo inline style -->
   <link rel="stylesheet" href="style.css">
   <!-- externí JS s logikou hry místo inline skriptu -->
   <script src="js.js" defer></script>
+  <!-- společné info okno: logika otevírání/zavírání modálního dialogu -->
+  <script src="../info.js" defer></script>
 </head>
 <body class="g2048-body">
+  <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+
+  <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
+  <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+    <div class="info-panel">
+      <div class="info-head">
+        <h2 class="info-title" id="infoTitle">🔢 2048</h2>
+        <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
+      </div>
+
+      <p>Skládejte dlaždice s mocninami dvou posunováním po mřížce. Stejné dlaždice se při srážce spojí na dvojnásobek; cílem je vytvořit dlaždice 2048.</p>
+
+      <h3 class="info-section">Pravidla</h3>
+      <ul class="info-list">
+        <li>Hrajete na mřížce 4 × 4 dlaždic.</li>
+        <li>Každým tahem posunete všechny dlaždice jedním směrem (vlevo, vpravo, nahoru, dolů).</li>
+        <li>Dvě dlaždice se stejnou hodnotou se při srážce sloučí a zdvojnásobí; z toho získáte body.</li>
+        <li>Po každém tahu se na náhodném volném místě objeví nová dlaždice (většinou 2, občas 4).</li>
+        <li>Vyhraje, kdo dosáhne dlaždice 2048; hra končí, když už není možné žádný tah udělat.</li>
+      </ul>
+
+      <h3 class="info-section">Ovládání</h3>
+      <ul class="info-list">
+        <li>Šipky — posun dlaždic do zvoleného směru</li>
+        <li>Dotyk / tažení (swipe) na mobilu — stejný efekt jako šipky</li>
+        <li>Tlačítko <em>Nová hra</em> — resetuje mřížku a skóre</li>
+      </ul>
+
+      <h3 class="info-section">Nastavení hry</h3>
+      <ul class="info-list">
+        <li>Mřížka je pevně 4 × 4 a cílem vždy dlaždice 2048.</li>
+        <li>Dlačdice se sloučí s plynulou animací posunu a „vyfouknutím" nové hodnoty.</li>
+        <li>Rekord (nejvyšší skóre) se ukládá do prohlížeče a přežije zavření stránky.</li>
+      </ul>
+    </div>
+  </div>
+
   <!-- hlavička s návratem do rozcestníku -->
   <header class="g2048-header">
     <a class="back-link" href="../index.html">← Zpět do menu</a>

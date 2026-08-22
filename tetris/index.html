@@ -7,12 +7,58 @@
   <!-- společný přepínač motivu (tmavý / světlý) — skript běží synchronně, aby motiv platil i před vykreslením těla -->
   <link rel="stylesheet" href="../theme.css">
   <script src="../theme.js"></script>
+  <!-- společné info okno: styly tlačítka a modálního dialogu s popisem hry -->
+  <link rel="stylesheet" href="../info.css">
   <!-- externí styl hry místo inline style -->
   <link rel="stylesheet" href="style.css">
   <!-- externí JS s logikou hry místo inline skriptu -->
   <script src="js.js" defer></script>
+  <!-- společné info okno: logika otevírání/zavírání modálního dialogu -->
+  <script src="../info.js" defer></script>
 </head>
 <body class="tetris-body">
+  <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+
+  <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
+  <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+    <div class="info-panel">
+      <div class="info-head">
+        <h2 class="info-title" id="infoTitle">🧱 Tetris</h2>
+        <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
+      </div>
+
+      <p>Klasická skládačka — padající kostky (tetramino) točíte a posouváte tak, aby zaplnily celé řádky. Plný řádek zmizí a přinese body.</p>
+
+      <h3 class="info-section">Pravidla</h3>
+      <ul class="info-list">
+        <li>Z horního okraje pole neustále padají kúsky tvořené 4 kostkami (I, O, T, S, Z, J, L).</li>
+        <li>Kús můžete posouvat doleva/doprava, otáčet a spěšovat dolů.</li>
+        <li>Když se dopadne, zafixuje se a ze dna pole se objeví další kús.</li>
+        <li>Plně obsazený řádek se smaže — získáte body (100/300/500/800 × úroveň).</li>
+        <li>Hra končí, když se nový kús už nemůže umístit (hromada dosáhne střechy).</li>
+      </ul>
+
+      <h3 class="info-section">Ovládání</h3>
+      <ul class="info-list">
+        <li>← → — pohyb kúsku vlevo/vpravo</li>
+        <li>↑ — rotace</li>
+        <li>↓ — spěch (rychlejší pád, +1 bod)</li>
+        <li>Mezerník — okamžitý pád na dno (+2 body za buňku)</li>
+        <li>P — pauza / pokračování</li>
+        <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em> — klikací alternativy</li>
+      </ul>
+
+      <h3 class="info-section">Nastavení hry</h3>
+      <ul class="info-list">
+        <li>Hrací pole je pevné 10 × 20 polí.</li>
+        <li>Kúsky se vybírají spravedlivým „7-bag" generátorem (vždy všech 7 tvarů v sadě).</li>
+        <li>Úroveň stoupá každých 10 přeskupených řádků a zvyšuje rychlost pádu (max. úroveň 15).</li>
+        <li>V panelu <em>Příští kus</em> vidíte, co padne jako další.</li>
+      </ul>
+    </div>
+  </div>
+
   <!-- hlavička s návratem do rozcestníku -->
   <header class="tetris-header">
     <a class="back-link" href="../index.html">← Zpět do menu</a>

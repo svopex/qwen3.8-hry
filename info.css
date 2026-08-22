@@ -1,0 +1,144 @@
+/* ====== Společné info okno — tlačítko "?" + modální dialog s popisem hry ====== */
+/* Tlačítko je pevně upnuto nahoře vpravo vedle přepínače motivu,
+   aby bylo dostupné na každé stránce bez ohledu na rozložení hry. */
+.info-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 5.25rem; /* vlevo od tlačítka motivu (44px + mezera) */
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 130, 150, 0.45);
+  background: rgba(120, 130, 150, 0.16);
+  color: inherit;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+
+/* jemná odezva na najetí a stisknutí — stejná jako u přepínače motivu */
+.info-toggle:hover {
+  transform: scale(1.08);
+  background: rgba(120, 130, 150, 0.28);
+}
+
+.info-toggle:active {
+  transform: scale(0.94);
+}
+
+/* ====== Modální dialog s popisem hry ====== */
+/* Překryv (backdrop) zakryje celou stránku a tlumí pozadí. */
+.info-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(8, 12, 24, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+/* skrytý stav — dialog se zobrazuje přes hidden atribut */
+.info-modal[hidden] {
+  display: none;
+}
+
+/* vnitřní panel s obsahem — omezená šířka a výška s vlastním scrollem */
+.info-panel {
+  width: 100%;
+  max-width: 560px;
+  max-height: min(80vh, 720px);
+  overflow-y: auto;
+  background: var(--info-bg, #1e293b);
+  color: var(--info-fg, #e2e8f0);
+  border: 1px solid var(--info-border, #334155);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  padding: 1.5rem 1.75rem 1.75rem;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* záhlaví panelu — název hry a zavírací tlačítko vedle sebe */
+.info-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* kruhové zavírací tlačítko vpravo nahoře */
+.info-close {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid var(--info-border, #334155);
+  background: transparent;
+  color: inherit;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.info-close:hover {
+  background: rgba(120, 130, 150, 0.2);
+  transform: scale(1.08);
+}
+
+/* nadpisy jednotlivých sekcí (Pravidla / Ovládání / Nastavení) */
+.info-section {
+  margin: 1.1rem 0 0.4rem;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--info-accent, #38bdf8);
+}
+
+/* textový odstavec v popisu */
+.info-panel p {
+  margin: 0.4rem 0;
+  line-height: 1.55;
+}
+
+/* odrážkový seznam — např. pravidla nebo možnosti nastavení */
+.info-list {
+  margin: 0.3rem 0 0.6rem;
+  padding-left: 1.3rem;
+  line-height: 1.55;
+}
+
+/* zkrácený popisek pod odstavcem (např. vysvětlení kláves) */
+.info-note {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ====== Přizpůsobení světlému motivu ====== */
+/* Každá hra si může definovat vlastní proměnné --info-*;
+   výchozí hodnoty pro světlý motiv přepíšeme tady, aby dialog
+   fungoval na stránkách, které tyto proměnné sami nezadávají. */
+html[data-motiv="svetly"] .info-panel {
+  --info-bg: #ffffff;
+  --info-fg: #1e293b;
+  --info-border: #cbd5e1;
+  --info-accent: #0284c7;
+}
