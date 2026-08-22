@@ -36,7 +36,7 @@ const REZIM_POCITAC = "pocitac";
 //              0 = nikdy nechybí (neporazitelný), 1 = vždy chybuje.
 // Sedm úrovní — od pomalého a chybného po neporazitelného.
 // Rychlosti stávajících úrovní zůstávají beze změny; nové úrovně (Expert, Mistr)
-// doplní velkou mezera mezi Pokročilým a Obtížným. U všech úrovní je mírně
+// doplní velkou mezera mezi Pokročilým a Bohem. U všech úrovní je mírně
 // snížena pravděpodobnost chyby počítače (lepe hraje), kromě vrcholové, která
 // nechybí už teď.
 const OBTEZNOSTI = {
@@ -44,11 +44,11 @@ const OBTEZNOSTI = {
   mirny: { nazev: "Mírný", rychlost: 250, pravdChyby: 0.3 },
   stredni: { nazev: "Střední", rychlost: 300, pravdChyby: 0.16 },
   pokrocily: { nazev: "Pokročilý", rychlost: 350, pravdChyby: 0.10 },
-  // nové úrovně mezi Pokročilým a Obtížným — rychlejší, ale stále občas chybují
+  // nové úrovně mezi Pokročilým a Bohem — rychlejší, ale stále občas chybují
   expert: { nazev: "Expert", rychlost: 400, pravdChyby: 0.08 },
   mistr: { nazev: "Mistr", rychlost: 450, pravdChyby: 0.06 },
   // nejvyšší obtížnost — počítač nikdy nechybí a je dost rychlý, aby míč vždy stihl
-  obtizny: { nazev: "Obtížný", rychlost: 500, pravdChyby: 0.01 },
+  obtizny: { nazev: "Bůh", rychlost: 500, pravdChyby: 0.01 },
 };
 
 // ==== Globální stav hry ====
