@@ -22,7 +22,7 @@ const HERY = [
   },
   {
     nazev: "Arkanoid",
-    popis: "Rozbij všechny cihly míčkem odrazujícím od palice.",
+    popis: "Rozbij všechny cihly míčkem odrazujícím se od plošiny.",
     ikona: "🧨",
     href: "arkanoid/index.html",
   },
