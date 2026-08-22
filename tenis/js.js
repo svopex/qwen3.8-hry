@@ -34,14 +34,21 @@ const REZIM_POCITAC = "pocitac";
 // rychlost   — maximální rychlost rakety počítače (px/s); vyšší = lépe dohání míč
 // pravdChyby — pravděpodobnost (0..1), že daný úder počítač záměrně minul.
 //              0 = nikdy nechybí (neporazitelný), 1 = vždy chybuje.
-// Pět úrovní — od pomalého a chybného po neporazitelného.
+// Sedm úrovní — od pomalého a chybného po neporazitelného.
+// Rychlosti stávajících úrovní zůstávají beze změny; nové úrovně (Expert, Mistr)
+// doplní velkou mezera mezi Pokročilým a Obtížným. U všech úrovní je mírně
+// snížena pravděpodobnost chyby počítače (lepe hraje), kromě vrcholové, která
+// nechybí už teď.
 const OBTEZNOSTI = {
-  lehky: { nazev: "Lehký", rychlost: 300, pravdChyby: 0.5 },
-  mirny: { nazev: "Mírný", rychlost: 400, pravdChyby: 0.35 },
-  stredni: { nazev: "Střední", rychlost: 520, pravdChyby: 0.2 },
-  pokrocily: { nazev: "Pokročilý", rychlost: 700, pravdChyby: 0.08 },
+  lehky: { nazev: "Lehký", rychlost: 200, pravdChyby: 0.45 },
+  mirny: { nazev: "Mírný", rychlost: 250, pravdChyby: 0.3 },
+  stredni: { nazev: "Střední", rychlost: 300, pravdChyby: 0.16 },
+  pokrocily: { nazev: "Pokročilý", rychlost: 350, pravdChyby: 0.10 },
+  // nové úrovně mezi Pokročilým a Obtížným — rychlejší, ale stále občas chybují
+  expert: { nazev: "Expert", rychlost: 400, pravdChyby: 0.08 },
+  mistr: { nazev: "Mistr", rychlost: 450, pravdChyby: 0.06 },
   // nejvyšší obtížnost — počítač nikdy nechybí a je dost rychlý, aby míč vždy stihl
-  obtizny: { nazev: "Obtížný", rychlost: 1500, pravdChyby: 0 },
+  obtizny: { nazev: "Obtížný", rychlost: 500, pravdChyby: 0.01 },
 };
 
 // ==== Globální stav hry ====
@@ -532,6 +539,10 @@ window.addEventListener("hry:motiv", () => {
 function zmenaRezimu(novyRezim) {
   rezim = novyRezim;
 
+  // select si po výběru ponechá fokus — odebereme ho, aby klávesy W/S/šipky
+  // během hry ovládaly jen rakety a nehodily select na jinou položku
+  modeSelect.blur();
+
   // obtížnost má smysl jen proti počítači — jinak je volba skrytá
   diffWrap.hidden = novyRezim !== REZIM_POCITAC;
 
@@ -547,6 +558,10 @@ function zmenaRezimu(novyRezim) {
 // Přepne obtížnost počítače (platí jen v režimu počítač).
 function zmenaObtiznosti(novaObtiznost) {
   obtiznost = novaObtiznost;
+
+  // select si po výběru ponechá fokus — odebereme ho, aby následné stisknutí
+  // klávesy (S/W/šipka) nehodilo obtížnost zpět a ovládalo jen raketu
+  diffSelect.blur();
 
   // cílovou polohu rakety nastavíme do středu a rozhodnutí znějeme,
   // aby nový let míče byl posouzen podle nové obtížnosti
