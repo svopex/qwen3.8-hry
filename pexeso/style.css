@@ -185,6 +185,13 @@
   max-width: 440px;
 }
 
+/* u největšího pole zvětšíme obal o ~10 %, aby karty měly víc místa */
+@media (min-width: 500px) {
+  .board-wrap:has(.gpex-pole[data-velikost="6"]) {
+    max-width: 484px;
+  }
+}
+
 /* hrací pole — mřížka karet; počet sloupců řídí proměnná --gpex-col (nastaví JS) */
 .gpex-pole {
   --gpex-col: 4; /* výchozí 4 sloupce; změna velikosti pole přepíše tuto hodnotu */
@@ -209,10 +216,10 @@
 .gpex-pole[data-velikost="5"] { --gpex-col: 5; }
 .gpex-pole[data-velikost="6"] { --gpex-col: 6; }
 
-/* u největšího pole jsou karty menší — symbol zmenšíme, aby do karty vešel */
+/* u největšího pole zvětšíme symboly o ~10 % pro lepší čitelnost */
 .gpex-pole[data-velikost="6"] .gpex-rub,
 .gpex-pole[data-velikost="6"] .gpex-lice {
-  font-size: clamp(1.2rem, 5vw, 2rem);
+  font-size: clamp(1.4rem, 6vw, 2.4rem);
 }
 
 /* jedna karta — perspektiva pro 3D otočení a klikací plocha */
