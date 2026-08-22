@@ -17,7 +17,7 @@
   <header class="tenis-header">
     <a class="back-link" href="../index.html">← Zpět do menu</a>
     <h1 class="tenis-title">Tenis</h1>
-    <span class="rule-hint">Dva hráči — klasická arkádová střídavá výměna míčku.</span>
+    <span class="rule-hint">Klasická arkádová výměna míčku — proti druhému hráči nebo počítači.</span>
   </header>
 
   <main class="tenis-main">
@@ -42,7 +42,7 @@
           <span class="score-value" id="scoreLeft">0</span>
         </div>
         <div class="score-row">
-          <span class="score-label">Hráč 2 (vpravo)</span>
+          <span class="score-label" id="scoreRightLabel">Hráč 2 (vpravo)</span>
           <span class="score-value" id="scoreRight">0</span>
         </div>
         <div class="score-row hint">
@@ -53,6 +53,30 @@
 
       <!-- ovládací prvky — klikací alternativy k klávesnici + popis kláves -->
       <section class="panel controls-panel" aria-label="Ovládání">
+        <!-- nastavení hry — režim a obtížnost vedle sebe (selecty se vejdou do úzkého panelu) -->
+        <div class="settings-row">
+          <!-- volba režimu: dva hráči u jednoho klávesnice, nebo proti počítači -->
+          <label class="setting">
+            <span class="setting-label">Režim</span>
+            <select id="modeSelect" class="setting-select">
+              <option value="dvouhra">Dva hráči</option>
+              <option value="pocitac">Počítač</option>
+            </select>
+          </label>
+
+          <!-- obtížnost počítače — viditelná jen v režimu „Počítač" (skrytou ji JS) -->
+          <label class="setting" id="diffWrap" hidden>
+            <span class="setting-label">Obtížnost</span>
+            <select id="diffSelect" class="setting-select">
+              <option value="lehky">Lehký</option>
+              <option value="mirny">Mírný</option>
+              <option value="stredni" selected>Střední</option>
+              <option value="pokrocily">Pokročilý</option>
+              <option value="obtizny">Obtížný</option>
+            </select>
+          </label>
+        </div>
+
         <button type="button" id="pauseBtn" class="ctrl-btn full">Pauza</button>
         <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
         <p class="keys-help">

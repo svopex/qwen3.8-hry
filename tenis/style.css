@@ -95,12 +95,12 @@
   border-radius: 12px;
 }
 
-/* boční panel — sloupec se skóre a ovládáním */
+/* boční panel — skóre a ovládání vedle sebe (řádek), aby hra nebyla tak vysoká */
 .tenis-side {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 1rem;
-  width: 240px;
 }
 
 /* jednotlivý panel (rámeček) v bočním panelu */
@@ -111,11 +111,12 @@
   padding: 1rem;
 }
 
-/* řádek skóre — popisek vlevo, hodnota vpravo */
+/* řádek skóre — popisek vlevo, hodnota vpravo; gap zajišťuje viditelnou mezeru i v úzkém panelu */
 .score-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   padding: 0.35rem 0;
 }
 
@@ -144,6 +145,55 @@
   border-top: 1px solid var(--border);
   margin-top: 0.4rem;
   padding-top: 0.6rem;
+}
+
+/* nastavení hry — režim a obtížnost vedle sebe, aby se vešla do úzkého panelu */
+.settings-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+/* jednotlivé políčko — popisek nad selectem (sloupec), aby šlo dát vedle sebe */
+.setting {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 0;
+  min-width: 0; /* umožní selectu se smrsknout, aby se vešel vedle druhého */
+}
+
+/* skrytá volba obtížnosti (dvouhra) — explicitní display:flex by přebil hidden */
+.setting[hidden] {
+  display: none;
+}
+
+/* popisek nad selectem (Režim / Obtížnost) */
+.setting-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9fb2ff;
+}
+
+/* select s volbou — neutrální rámeček, compact, aby se vešel do úzkého panelu */
+.setting-select {
+  width: 100%;
+  padding: 0.4rem 0.4rem;
+  background: var(--bg-panel);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.setting-select:hover,
+.setting-select:focus {
+  border-color: var(--accent);
+  outline: none;
 }
 
 /* ovládací tlačítka */
