@@ -86,7 +86,8 @@ function okamziteSkoky(bd, r, c, jeDama, vlastnik) {
         const i = idx(ir, ic);
         if (bd[i] !== null) {
           // narazili jsme na první kámen v tomto směru
-          if (bd[i].o !== vlastnik) {
+          // (kámen sebraný dříve v témže tahu se přeskočit nesmí — jen překáží)
+          if (bd[i].o !== vlastnik && !bd[i].sebrany) {
             // cizí kámen → můžeme ho přeskakovat a dopadnout na libovolné volné pole za ním
             let jr = ir + dr, jc = ic + dc;
             while (vPoli(jr, jc) && bd[idx(jr, jc)] === null) {
@@ -108,8 +109,8 @@ function okamziteSkoky(bd, r, c, jeDama, vlastnik) {
       const cr = r + dr, cc = c + dc;
       if (!vPoli(cr, cc)) continue;
       const ci = idx(cr, cc);
-      // skok jen přes cizího souseda a pouze na volné pole za ním
-      if (bd[ci] !== null && bd[ci].o !== vlastnik) {
+      // skok jen přes cizího souseda (a ne přes dříve sebraný kámen) na volné pole za ním
+      if (bd[ci] !== null && bd[ci].o !== vlastnik && !bd[ci].sebrany) {
         const lr = cr + dr, lc = cc + dc;
         if (vPoli(lr, lc) && bd[idx(lr, lc)] === null) {
           vysledky.push({ to: [lr, lc], cap: [cr, cc] });
@@ -140,9 +141,14 @@ function sbirSkoky(bd, r, c, jeDama, vlastnik, cesta, znicene, vysledky) {
   for (const m of moznosti) {
     const capIdx = idx(m.cap[0], m.cap[1]);
     const zachovanyKamen = bd[capIdx]; // uložíme pro obnovení
-    bd[capIdx] = null;                 // zničíme soupeřův kámen
+    // sebraný kámen z desky nemizí hned — leží dál až do konce tahu a překáží
+    // dalším skokům (jinak by dáma mohla přeletět přes vlastní kořist)
+    bd[capIdx] = { o: zachovanyKamen.o, k: zachovanyKamen.k, sebrany: true };
 
     const [nr, nc] = m.to;
+    // kámen skutečně dosedne na nové pole, aby v dalších skocích sám sobě překážel
+    const cilIdx = idx(nr, nc);
+    bd[cilIdx] = { o: vlastnik, k: jeDama };
     // kontrola proměny v dámu — po ní tah končí (mezinárodní pravidlo)
     const promena = !jeDama &&
       ((vlastnik === VLASTNIK_HRA && nr === 0) ||
@@ -166,6 +172,7 @@ function sbirSkoky(bd, r, c, jeDama, vlastnik, cesta, znicene, vysledky) {
     // obnovení stavu pro další možnost
     cesta.pop();
     znicene.pop();
+    bd[cilIdx] = null;
     bd[capIdx] = zachovanyKamen;
   }
 }
@@ -182,7 +189,10 @@ function generujTahy(vlastnik) {
       const bu = board[idx(r, c)];
       if (!bu || bu.o !== vlastnik) continue;
       if (okamziteSkoky(board, r, c, bu.k, vlastnik).length === 0) continue;
+      // kámen na dobu hledání řetězce opustí výchozí pole (jinak by si sám blokoval diagonálu)
+      board[idx(r, c)] = null;
       sbirSkoky(board, r, c, bu.k, vlastnik, [[r, c]], [], skoky);
+      board[idx(r, c)] = bu;
     }
   }
 
@@ -320,7 +330,8 @@ function vyberTahPC() {
     const kopie = klonBoardu();
     aplikujTah(kopie, move, VLASTNIK_PC);
     const hodnota = minimax(kopie, HLOUBKA_AI - 1, -Infinity, Infinity, VLASTNIK_HRA);
-    if (hodnota > nejLepsiHodnota) {
+    // podmínka na null zajistí výběr i v prohrané pozici, kde jsou všechny tahy -Infinity
+    if (nejLepsi === null || hodnota > nejLepsiHodnota) {
       nejLepsiHodnota = hodnota;
       nejLepsi = move;
     }
