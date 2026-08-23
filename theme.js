@@ -22,7 +22,7 @@
   // Inicializace — běží hned při načtení skriptu, výchozí motiv je tmavý.
   let aktualni = cteniUlozeny();
   if (aktualni !== "svetly" && aktualni !== "tmavy") {
-    aktualni = "tmavy";
+    aktualni = "svetly";
   }
   aplikuj(aktualni);
 
