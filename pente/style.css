@@ -268,16 +268,6 @@
   transform: translateY(1px);
 }
 
-/* nápověda s pravidly pod polem */
-.keys-help {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #9fb2ff;
-  line-height: 1.6;
-  text-align: center;
-  max-width: 720px;
-}
-
 /* patička rozcestníku */
 .pente-footer {
   margin-top: auto;
@@ -342,9 +332,8 @@ html[data-motiv="svetly"] .back-link:hover {
   background: rgba(37, 99, 235, 0.15);
 }
 
-/* popisky ukazatelů a nápovědy — tmavé odstíny pro kontrast */
-html[data-motiv="svetly"] .hud-label,
-html[data-motiv="svetly"] .keys-help {
+/* popisky ukazatelů — tmavé odstíny pro kontrast */
+html[data-motiv="svetly"] .hud-label {
   color: #475569;
 }
 
