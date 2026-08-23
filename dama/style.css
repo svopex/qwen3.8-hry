@@ -60,12 +60,6 @@
   color: transparent;
 }
 
-.dama-title .sub {
-  font-size: 0.9rem;
-  color: #b89a63;
-  -webkit-text-fill-color: #b89a63;
-}
-
 /* hlavní rozložení — herní plocha uprostřed */
 .dama-main {
   display: flex;

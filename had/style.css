@@ -62,13 +62,6 @@
   color: transparent;
 }
 
-/* krátký popis pravidla (procházení zdí) */
-.rule-hint {
-  font-size: 0.8rem;
-  color: #9fb2ff;
-  margin-left: auto;
-}
-
 /* hlavní rozložení — hrací pole vedle bočního panelu */
 .snake-main {
   display: flex;
@@ -306,8 +299,7 @@ html[data-motiv="svetly"] .snake-title {
   background-clip: text;
 }
 
-/* popis pravidla, popisky statistik a nápovědy — tmavé odstíny pro kontrast */
-html[data-motiv="svetly"] .rule-hint,
+/* popisky statistik a nápovědy — tmavé odstíny pro kontrast */
 html[data-motiv="svetly"] .stat-label,
 html[data-motiv="svetly"] .keys-help {
   color: #475569;

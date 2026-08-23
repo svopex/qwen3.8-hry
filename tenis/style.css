@@ -61,13 +61,6 @@
   color: transparent;
 }
 
-/* krátký popis pravidla */
-.rule-hint {
-  font-size: 0.8rem;
-  color: #9fb2ff;
-  margin-left: auto;
-}
-
 /* hlavní rozložení — hrací pole vedle bočního panelu */
 .tenis-main {
   display: flex;
@@ -333,8 +326,7 @@ html[data-motiv="svetly"] .tenis-title {
   background-clip: text;
 }
 
-/* popis pravidla, popisky skóre a nápovědy — tmavé odstíny pro kontrast */
-html[data-motiv="svetly"] .rule-hint,
+/* popisky skóre a nápovědy — tmavé odstíny pro kontrast */
 html[data-motiv="svetly"] .score-label,
 html[data-motiv="svetly"] .keys-help {
   color: #475569;
