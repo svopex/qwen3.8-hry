@@ -4,16 +4,27 @@
 // Pravo tlačítko staví vlajky; klik na odhalené číslo s kompletním počtem vlajek
 // odhalí všechny zbývající sousedy (tzv. chord).
 
-// ---- Rozměry hrací mřížky (jednotky: buňky) a počet min ----
-const COLS = 30;
-const ROWS = 20;
-const POCT_MIN = 80;
+// ---- Pět volitelných velikostí hracího pole (sloupce × řádky, počet min) ----
+const VELIKOSTI = [
+  { nazev: "Malá", cols: 9, rows: 9, miny: 10 },
+  { nazev: "Střední", cols: 12, rows: 12, miny: 20 },
+  { nazev: "Velká", cols: 16, rows: 12, miny: 30 },
+  { nazev: "Xtra", cols: 20, rows: 14, miny: 45 },
+  { nazev: "Max", cols: 24, rows: 16, miny: 60 },
+];
+
+// aktivní velikost — index do pole VELIKOSTI (výchozí: Velká)
+let velkostIdx = 2;
+// rozměry a počet min aktuální velikosti — mění se při přepnutí velikosti
+let COLS;
+let ROWS;
+let POCT_MIN;
 
 // ==== Globální stav hry ====
 let mridka;      // 2D pole buněk: {mina, cislo, opened, flag}
 let zacataHra;   // zda se hra již začala (pro startování časoměru)
 let konecHry;    // zda hra skončila (výhra nebo prohry)
-const celkemBunek = COLS * ROWS;
+let celkemBunek; // celkový počet buněk — přepočítá se při změně velikosti
 let zbujikuOtevreno; // počet odhalených buněk (podmínka výhry)
 let secCas;         // běhající čas v sekundách
 let casTimer;       // identifikátor intervalu časoměru
@@ -31,6 +42,8 @@ const overlayText = document.getElementById("overlayText");
 const overlayBtn = document.getElementById("overlayBtn");
 const revealModeBtn = document.getElementById("revealModeBtn");
 const flagModeBtn = document.getElementById("flagModeBtn");
+// kontejner s tlačítky výběru velikosti pole
+const sizeBar = document.getElementById("sizeBar");
 
 // ==== Pomocné: souřadnice a sousedi ====
 
@@ -53,11 +66,38 @@ function sousedi(x, y) {
 
 // ==== Výstava hracího pole ====
 
-// Vytvoří DOM buňky do CSS mřížky a nastaví elastické sloupce, aby pole zaplnilo šířku.
+// Vytvoří DOM buňky do CSS mřížky. Velikost buněk je pevná a stejná pro všechny úrovně —
+// bere se z šířky hlavního sloupce dělené počtem sloupců Max pole, takže menší pole jsou jen
+// užší (vycentrovaná), ale jejich buňky mají vždy stejnou velikost jako na Max.
 function vykresliPole() {
   board.innerHTML = "";
-  // minmax(0, 1fr) = každý sloupec se rovnoměrně roztáhne do dostupné šířky → žádné přelévání
-  board.style.gridTemplateColumns = `repeat(${COLS}, minmax(0, 1fr))`;
+  // referenční kontejner s plnou dostupnou šířkou (hlavní sloupec)
+  const ref = document.querySelector(".miny-main") || board.parentElement;
+  const dostupnaSirka = ref ? ref.clientWidth : board.clientWidth;
+  // počet sloupců největšího pole určuje rozměr jedné buňky
+  const maxCols = Math.max(...VELIKOSTI.map((v) => v.cols));
+
+  // skutečné rozměry ohraničení a mezery pole — aby výpočet seděl i při světlém motivu a na mobilu
+  const cs = getComputedStyle(board);
+  const padL = parseFloat(cs.paddingLeft) || 0;
+  const padR = parseFloat(cs.paddingRight) || 0;
+  const borL = parseFloat(cs.borderLeftWidth) || 0;
+  const borR = parseFloat(cs.borderRightWidth) || 0;
+  const mezera = parseFloat(cs.columnGap) || parseFloat(cs.rowGap) || parseFloat(cs.gap) || 3;
+  // celková šířka "ne-buněčného" prostoru: ohraničení + mezery mezi sloupci
+  const chrome = padL + padR + borL + borR + (maxCols - 1) * mezera;
+
+  // velikost buňky tak, aby Max pole přesně vešlo do dostupné šířky
+  let cellSize = Math.floor((dostupnaSirka - chrome) / maxCols);
+  // horní hranice, aby buňky nebyly na velkých obrazovkách přexlované
+  cellSize = Math.min(cellSize, 34);
+  // dolní hranice jen proti nulové/negativní hodnotě, bez nutného přelévání
+  cellSize = Math.max(cellSize, 10);
+
+  // pevná velikost sloupce v px — všechny úrovně mají stejně velké buňky
+  board.style.gridTemplateColumns = `repeat(${COLS}, ${cellSize}px)`;
+  // uložení do CSS proměnné, aby se dala upravit i velikost písma buňky
+  board.style.setProperty("--cell-size", cellSize + "px");
 
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
@@ -433,6 +473,34 @@ function nastavRezim(novy) {
 revealModeBtn.addEventListener("click", () => nastavRezim("reveal"));
 flagModeBtn.addEventListener("click", () => nastavRezim("flag"));
 
+// ==== Výběr velikosti hracího pole ====
+// Přepne aktivní velikost: uloží rozměry i počet min a spustí novou hru.
+function nastavVelkost(idx) {
+  velkostIdx = idx;
+  COLS = VELIKOSTI[idx].cols;
+  ROWS = VELIKOSTI[idx].rows;
+  POCT_MIN = VELIKOSTI[idx].miny;
+  celkemBunek = COLS * ROWS;
+  // zvýrazní aktivní tlačítko velikosti
+  const tlacitka = sizeBar.querySelectorAll(".size-btn");
+  tlacitka.forEach((t, i) => t.classList.toggle("active", i === idx));
+  // změna velikosti vždy znamená novou hru s čistou mřížkou
+  novaHra();
+}
+
+// Vytvoří tlačítka velikostí do lišty a napojí jejich kliknutí.
+function vygenerujTlacitkaVelkosti() {
+  VELIKOSTI.forEach((v, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "size-btn";
+    btn.textContent = v.nazev;
+    btn.title = `${v.cols} × ${v.rows} (${v.miny} min)`;
+    btn.addEventListener("click", () => nastavVelkost(i));
+    sizeBar.appendChild(btn);
+  });
+}
+
 // ==== Nová hra ====
 function novaHra() {
   // vyčisti časoměr a stav
@@ -470,6 +538,16 @@ overlayBtn.addEventListener("click", novaHra);
 
 // ==== Spouštění ====
 document.addEventListener("DOMContentLoaded", () => {
+  // nastaví rozměry a počet min podle výchozí velikosti (Velká)
+  COLS = VELIKOSTI[velkostIdx].cols;
+  ROWS = VELIKOSTI[velkostIdx].rows;
+  POCT_MIN = VELIKOSTI[velkostIdx].miny;
+  celkemBunek = COLS * ROWS;
+  // vygeneruje tlačítka velikostí a zvýrazní aktivní
+  vygenerujTlacitkaVelkosti();
+  const tlacitka = sizeBar.querySelectorAll(".size-btn");
+  tlacitka.forEach((t, i) => t.classList.toggle("active", i === velkostIdx));
+
   novaHra();
 
   // delegace událostí na board — vydrží i při vyměněných buňkách

@@ -16,6 +16,8 @@
   --cell-open: #10162b;
   --cell-mine: #3a1020;
   --danger: #ff5c7a;
+  /* pevná velikost buňky — JS ji přepočítá podle Max pole, aby všechny úrovně měly buňky stejně velké */
+  --cell-size: 34px;
 
   margin: 0;
   min-height: 100vh;
@@ -72,8 +74,8 @@
   max-width: 940px;
 }
 
-/* horní lišta s odpočítávači a reset tlačítkem */
-.hud {
+/* řádek s ovládáním — miny, čas, nová hra, velikost pole a režim v jednom řádku */
+.controls-row {
   display: flex;
   align-items: stretch;
   gap: 0.75rem;
@@ -150,33 +152,70 @@
   border-color: var(--accent);
 }
 
-/* relativní obal pro hrací pole + překryv stavů; pole se přizpůsobí šířce a nepřelévá */
+/* lišta tlačítek velikosti hracího pole — segmenty vedle sebe jako jedno ovládání */
+.size-bar {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* jedno tlačítko velikosti — kompaktní, aby se vešlo do řádku s ostatním ovládáním */
+.size-btn {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--fg);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.size-btn:hover {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* aktivní velikost — zvýrazněná akcentem */
+.size-btn.active {
+  background: var(--accent);
+  color: #06102a;
+}
+
+/* relativní obal pro hrací pole + překryv stavů; smrskne se na šířku pole a vycentruje ho,
+   takže překryv (výhra/prohra) přesně zakrývá jen hrací pole i u malých úrovní */
 .board-wrap {
   position: relative;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
+  margin: 0 auto;
   overflow: hidden;
 }
 
-/* hrací pole — CSS mřížka; sloupce se přizpůsobí šířce kontejneru, takže nepřelévá */
+/* hrací pole — CSS mřížka s pevnou šířkou buněk (JS ji nastaví na px); pole se nezahučuje do šířky,
+   takže všechny úrovně mají stejně velké buňky a menší pole jsou jen užší a vycentrovaná */
 .miny-board {
   display: grid;
-  grid-template-columns: repeat(30, minmax(0, 1fr));
+  grid-template-columns: repeat(24, minmax(0, 1fr)); /* výchozí, JS přepíše na pevné px podle Max pole */
   gap: 3px;
   padding: 8px;
-  width: 100%;
+  width: max-content; /* šířka podle obsahu (počet × velikost sloupce), ne podle kontejneru */
   background: #050816;
   border: 2px solid var(--border);
   border-radius: 12px;
 }
 
-/* jedna buňka hracího pole — šířka se bere z mřížky, výška drží čtverec přes aspect-ratio */
+/* jedna buňka hracího pole — šířka se bere z mřížky, výška drží čtverec přes aspect-ratio;
+   velikost písma se přizpůsobí pevné velikosti buňky (proměnná --cell-size z JS) */
 .cell {
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(0.6rem, 1.4vw, 1.05rem);
+  font-size: calc(var(--cell-size, 34px) * 0.5);
   font-weight: 700;
   user-select: none;
   cursor: pointer;

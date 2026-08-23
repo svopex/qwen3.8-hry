@@ -28,11 +28,11 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Hledáte miny na velkém poli. Odkrývejte buňky, čísla vám napoví, kolik min má buňka kolem sebe, a vlajkami označujte podezřelá místa.</p>
+      <p>Hledáte miny na poli s volitelnou velikostí. Odkrývejte buňky, čísla vám napoví, kolik min má buňka kolem sebe, a vlajkami označujte podezřelá místa.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Pole je 30 × 20 polí (600 buněk) se skrytými minami.</li>
+        <li>Pole má volitelnou velikost (Malá až Max) se skrytými minami.</li>
         <li>Klikněte na buňku a odkryjete ji — číslo ukazuje počet min v sousedních polích.</li>
         <li>Pravým klikem (nebo režimem <em>Vlajky</em>) postavíte na podezřelou buňku vlajku 🚩.</li>
         <li>Klik na odhalené číslo, které má kolem sebe tolik vlajek, jako ukazuje, odkryje zbývající sousedy (tzv. chord).</li>
@@ -50,7 +50,7 @@
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Počet min je pevně daný (80) a rozměr pole 30 × 20.</li>
+        <li>Rozměr pole a počet min zvolíte tlačítky velikosti (Malá, Střední, Velká, Xtra, Max).</li>
         <li>První klik je vždy bezpečný — miny se vygenerují až po něm, takže začátečník nikdy netrefí minu.</li>
         <li>Hud obsahuje odpočítavač zbývajících min a časoměr.</li>
       </ul>
@@ -64,11 +64,11 @@
   </header>
 
   <main class="miny-main">
-    <!-- horní lišta s odpočítávači (miny, čas) a reset tlačítkem -->
-    <div class="hud">
+    <!-- řádek s ovládáním: miny, čas, nová hra, velikost pole a režim (odkrývat / vlajky) -->
+    <div class="controls-row">
       <div class="hud-box" aria-label="Zbývající miny">
         <span class="hud-label">Miny</span>
-        <span class="hud-value" id="minesLeft">80</span>
+        <span class="hud-value" id="minesLeft">30</span>
       </div>
 
       <!-- obal tváře — tlačítko pro znovu spuštění hry -->
@@ -78,12 +78,15 @@
         <span class="hud-label">Čas</span>
         <span class="hud-value" id="timer">0</span>
       </div>
-    </div>
 
-    <!-- režim práce: odkrývat buňky nebo stavět vlajky (užitečné pro dotyková zařízení) -->
-    <div class="mode-bar">
-      <button type="button" id="revealModeBtn" class="mode-btn active" data-mode="reveal">Odkrývat</button>
-      <button type="button" id="flagModeBtn" class="mode-btn" data-mode="flag">Vlajky</button>
+      <!-- tlačítka velikosti hracího pole — JS je vygeneruje podle VELIKOSTI -->
+      <div class="size-bar" id="sizeBar" role="group" aria-label="Velikost hracího pole"></div>
+
+      <!-- režim práce: odkrývat buňky nebo stavět vlajky (užitečné pro dotyková zařízení) -->
+      <div class="mode-bar">
+        <button type="button" id="revealModeBtn" class="mode-btn active" data-mode="reveal">Odkrývat</button>
+        <button type="button" id="flagModeBtn" class="mode-btn" data-mode="flag">Vlajky</button>
+      </div>
     </div>
 
     <!-- rel. obal — uvnitř je velké hrací pole, nad ním může být překryv stavů (výhra/konc) -->
