@@ -9,7 +9,7 @@ const VELIKOSTI = [
   { nazev: "Malá", cols: 9, rows: 9, miny: 10 },
   { nazev: "Střední", cols: 12, rows: 12, miny: 20 },
   { nazev: "Velká", cols: 16, rows: 12, miny: 30 },
-  { nazev: "Xtra", cols: 20, rows: 14, miny: 45 },
+  { nazev: "Obří", cols: 20, rows: 14, miny: 45 },
   { nazev: "Max", cols: 24, rows: 16, miny: 60 },
 ];
 
@@ -355,7 +355,7 @@ function konecHryProhra() {
   }
   refreshVse();
 
-  overlayText.textContent = "Trefili jste minu — konec hry";
+  overlayText.textContent = "Trefili jste minu – konec hry.";
   pokazHry(true);
 }
 
@@ -377,8 +377,8 @@ function konecHryVyhra() {
   refreshVse();
   aktualizujMiny();
 
-  overlayText.textContent = `Výhra za ${secCas}s!`;
-  overlayBtn.textContent = "Hrát znovu";
+  overlayText.textContent = `Vyhráli jste za ${secCas} s!`;
+  overlayBtn.textContent = "Nová hra";
   pokazHry(true);
 }
 
@@ -495,7 +495,7 @@ function vygenerujTlacitkaVelkosti() {
     btn.type = "button";
     btn.className = "size-btn";
     btn.textContent = v.nazev;
-    btn.title = `${v.cols} × ${v.rows} (${v.miny} min)`;
+    btn.title = `${v.cols} × ${v.rows}, počet min: ${v.miny}`;
     btn.addEventListener("click", () => nastavVelkost(i));
     sizeBar.appendChild(btn);
   });

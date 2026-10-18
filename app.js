@@ -4,60 +4,60 @@
 const HERY = [
   {
     nazev: "Tetris",
-    popis: "Klasická skládačka z kostek.",
+    popis: "Otáčejte a posouvejte padající kostky tak, aby zaplnily celé řádky.",
     ikona: "🧱",
     href: "tetris/index.html",
   },
   {
     nazev: "Miny",
-    popis: "Najdi všechny miny ve velkém polí.",
+    popis: "Podle čísel odhalte ukryté miny a odkryjte všechna bezpečná pole.",
     ikona: "💣",
     href: "miny/index.html",
   },
   {
     nazev: "Had",
-    popis: "Klasický had — projíždí zeďmi a vynoří se na opačné straně pole.",
+    popis: "Sbírejte jídlo a rosťte – okraji pole projedete, jen nenarazte do vlastního těla.",
     ikona: "🐍",
     href: "had/index.html",
   },
   {
     nazev: "Arkanoid",
-    popis: "Rozbij všechny cihly míčkem odrazujícím se od plošiny.",
+    popis: "Rozbijte všechny cihly míčkem, který odrážíte plošinou.",
     ikona: "🧨",
     href: "arkanoid/index.html",
   },
   {
     nazev: "Piškvorky",
-    popis: "Spojte 5 kuliček v řadě a poražte počítač.",
+    popis: "Spojte pět svých značek do řady dřív než počítač.",
     ikona: "⚪",
     href: "pente/index.html",
   },
   {
     nazev: "Tenis",
-    popis: "Klasická arkádová hra — dva hráči si palici pingají míček.",
+    popis: "Arkádový tenis ve stylu Pongu proti počítači nebo pro dva hráče.",
     ikona: "🎾",
     href: "tenis/index.html",
   },
   {
     nazev: "Dáma",
-    popis: "Desková hra — skákejte, proměňujte a poražte počítač.",
+    popis: "Klasická dáma proti počítači – berte kameny a proměňujte je v dámy.",
     ikona: "♛",
     href: "dama/index.html",
   },
   {
     nazev: "2048",
-    popis: "Spojujte stejné dlaždice šipkami, dokud nedosáhnete 2048.",
+    popis: "Posouvejte dlaždice, spojujte stejná čísla a vytvořte dlaždici 2048.",
     ikona: "🔢",
     href: "2048/index.html",
   },
   {
     nazev: "Karetní pexeso",
-    popis: "Odvracej karty po dvou a najdi všechny dvojice stejných symbolů.",
+    popis: "Otáčejte karty po dvou a najděte všechny dvojice na co nejméně tahů.",
     ikona: "🃏",
     href: "pexeso/index.html",
   },
   // další hry se přidávají sem, např.:
-  // { nazev: "Rebus", popis: "Vyhádej slovo z obrázku.", ikona: "🧩", href: "rebus/index.html" },
+  // { nazev: "Rebus", popis: "Uhodněte slovo podle obrázku.", ikona: "🧩", href: "rebus/index.html" },
 ];
 
 // Vykreslí všechny karty do kontejneru menuGrid

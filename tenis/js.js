@@ -377,9 +377,9 @@ function resetSirkaMice(kamLeti) {
 function konecHry() {
   over = true;
   // pravý hráč je v režimu počítač označen jako „Počítač"
-  const nazevPravy = rezim === REZIM_POCITAC ? "Počítač" : "Hráč 2 (vpravo)";
-  const nazev = winner === "left" ? "Hráč 1 (vlevo)" : nazevPravy;
-  overlayText.textContent = `Vyhrává ${nazev}!`;
+  const nazevPravy = rezim === REZIM_POCITAC ? "počítač" : "hráč 2 (vpravo)";
+  const nazev = winner === "left" ? "hráč 1 (vlevo)" : nazevPravy;
+  overlayText.textContent = `Vyhrál ${nazev}!`;
   overlayBtn.textContent = "Nová hra";
   pokazHry(true);
 }

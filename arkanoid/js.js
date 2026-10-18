@@ -138,12 +138,17 @@ function pripravitMicek() {
   ball.y = PADDLE_Y - ball.r - 1;
   ball.vx = 0;
   ball.vy = 0;
+  // míček čeká na výstřel — tlačítko „Vystřelit“ zobrazíme (i po ztrátě života)
+  launchBtn.hidden = false;
 }
 
 // Odpočí míček od palice a nadá ho do pole s lehkým náklonem.
 function odstreliMicek() {
   if (!ball.stuck) return;
   ball.stuck = false;
+  // míček letí — tlačítko skryjeme bez ohledu na to, čím byl vystřelen
+  // (tlačítko, mezerník, klik i dotyk na plátně)
+  launchBtn.hidden = true;
   // odhodí míček téměř svisle nahoru, malý náhodný náklon do strany
   const smer = Math.random() < 0.5 ? -1 : 1;
   const uhel = smer * (0.15 + Math.random() * 0.2); // radiany od svislice
@@ -239,7 +244,12 @@ function posunMicek(dist) {
         if (c.hp <= 0) {
           c.alive = false;
           score += c.points;
-          if (score > best) best = score;
+          // nový rekord ukládáme hned, aby se neztratil při restartu
+          // uprostřed hry ani při zavření stránky
+          if (score > best) {
+            best = score;
+            ulozRekord();
+          }
           aktualizujStat();
           // úroveň splněna?
           if (vseRozbito()) {
@@ -276,8 +286,8 @@ function ztratitZivot() {
 function konecHry() {
   gameOver = true;
   ulozRekord();
-  overlayText.textContent = `Konec hry · ${score}`;
-  overlayBtn.textContent = "Zkusit znovu";
+  overlayText.textContent = `Konec hry – skóre: ${score}`;
+  overlayBtn.textContent = "Nová hra";
   restartBtn.textContent = "Nová hra";
   launchBtn.hidden = true;
   pokazHry(true);
@@ -292,11 +302,10 @@ function dalsiUroven() {
   aktualizujStat();
   vykresli();
   // krátká vizuální pauza na přechod (nepoškodí, protože míček je na palici)
-  overlayText.textContent = `Úroveň ${level}`;
+  overlayText.textContent = `Postupujete do úrovně ${level}`;
   overlayBtn.textContent = "Pokračovat";
   restartBtn.textContent = "Nová hra";
-  launchBtn.hidden = false;
-  paused = true; // po pokračování pokračuje
+  nastavPauzu(true); // hra stojí, dokud hráč nepokračuje nebo nevystřelí
   overlay.hidden = false;
 }
 
@@ -314,14 +323,21 @@ function pokazHry(zobrazit) {
   overlay.hidden = !zobrazit;
 }
 
+// Nastaví stav pauzy a vždy s ním sladí text tlačítka pauzy,
+// aby tlačítko neukazovalo „Pokračovat“, když hra už běží (a naopak).
+// Parametr: pauza — true = hra stojí, false = hra běží.
+function nastavPauzu(pauza) {
+  paused = pauza;
+  pauseBtn.textContent = paused ? "Pokračovat" : "Pauza";
+}
+
 // Přepne pauzu (míček i palici zastaví).
 function prepnPause() {
   if (gameOver) return;
-  paused = !paused;
+  nastavPauzu(!paused);
   // text překryvu je při pauze vždy stejný, tlačítko přepne na „Pokračovat"
-  overlayText.textContent = "Pozastaveno";
+  overlayText.textContent = "Hra je pozastavena";
   overlayBtn.textContent = "Pokračovat";
-  pauseBtn.textContent = paused ? "Pokračovat" : "Pozastavit";
   pokazHry(paused);
 }
 
@@ -346,12 +362,13 @@ function restart() {
   score = 0;
   currentSpeed = BASE_SPEED;
   gameOver = false;
-  paused = false;
+  // restart během pauzy musí vrátit i text tlačítka pauzy
+  nastavPauzu(false);
   paddle = { x: W / 2 };
   ball = { x: W / 2, y: PADDLE_Y - BALL_R - 1, r: BALL_R, vx: 0, vy: 0, stuck: true };
   bricks = buildBricks(level);
+  // pripravitMicek zároveň zobrazí tlačítko „Vystřelit“
   pripravitMicek();
-  launchBtn.hidden = false;
   launchBtn.textContent = "Vystřelit";
   aktualizujStat();
   vykresli();
@@ -435,7 +452,7 @@ function vykresli() {
     ctx.fillStyle = window.hrySvetlyMotiv() ? "rgba(30,41,59,0.8)" : "rgba(230,236,255,0.75)";
     ctx.font = "15px 'Segoe UI', system-ui, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("Klikni nebo stiskni mezerník a odpočí míček", W / 2, H / 2);
+    ctx.fillText("Míček vystřelíte kliknutím, dotykem nebo mezerníkem", W / 2, H / 2);
     ctx.textAlign = "start";
   }
 }
@@ -541,10 +558,10 @@ document.addEventListener("keyup", (e) => {
 // ==== Spojení tlačítek ====
 launchBtn.addEventListener("click", () => {
   if (!gameOver && ball.stuck) {
+    // odstreliMicek tlačítko sám skryje
     odstreliMicek();
-    launchBtn.hidden = true;
     // pokud jsme z překryvu úrovně, pokračuj
-    paused = false;
+    nastavPauzu(false);
     pokazHry(false);
     lastTime = performance.now();
   }
@@ -560,7 +577,7 @@ overlayBtn.addEventListener("click", () => {
   if (gameOver) {
     restart();
   } else if (paused) {
-    paused = false;
+    nastavPauzu(false);
     // pokud míček leží na palici, počká na odpočet
     pokazHry(false);
     lastTime = performance.now();

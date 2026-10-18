@@ -18,7 +18,7 @@
 </head>
 <body class="pente-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,28 +28,28 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Pět do řady proti počítači. Střídejte tahy a snažte se spojit pět svých kuliček dřív než soupeř.</p>
+      <p>Klasické piškvorky proti počítači. Střídáte se s ním v tazích a snažíte se dřív než on spojit pět svých značek do řady.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Hraje se na velkém poli 30 × 20 polí.</li>
-        <li>První tah patří vám (✕); počítač odpovídá (⊙).</li>
-        <li>Každým tahem položíte jednu kuličku na prázdné pole.</li>
-        <li>Vyhraje, kdo první spojí 5 kuliček do řady — vodorovně, svisle i diagonálně.</li>
-        <li>Zaplňte-li celé pole bez pěti v řadě, je to remíza.</li>
+        <li>Hraje se na hracím poli o rozměru 30 × 20 políček.</li>
+        <li>Začínáte vždy vy se značkou ✕, počítač hraje se značkou ⊙.</li>
+        <li>V každém tahu se položí jedna značka na volné políčko.</li>
+        <li>Vyhrává ten, kdo jako první vytvoří nepřerušenou řadu alespoň pěti svých značek – vodorovně, svisle nebo úhlopříčně.</li>
+        <li>Pokud se zaplní celé pole a nikdo nemá pět v řadě, hra končí remízou.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Klikněte na prázdné pole a postavíte svou kuličku.</li>
-        <li>Tlačítko tváře 🙂 — nová hra (resetuje skóre).</li>
+        <li>Kliknutím na volné políčko položíte svou značku.</li>
+        <li>Tlačítkem s obličejem 🙂 začnete kdykoli novou hru, po skončení partie také tlačítkem „Nová hra“. Skóre se přitom nenuluje.</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Pole je pevně 30 × 20 a cílem je vždy 5 kuliček v řadě.</li>
-        <li>Počítač hraje silnou heuristikou — blokuje vaše hrozby a staví vlastní útvary.</li>
-        <li>Hud ukazuje pořadí tahu a skóre obou hráčů napříč partiiemi.</li>
+        <li>Velikost pole (30 × 20) ani počet značek potřebných k výhře (5) nelze měnit.</li>
+        <li>Obtížnost počítače nelze nastavit. Počítač dokončí vlastní pětku, jakmile může, blokuje vaše hrozby a staví vlastní řady.</li>
+        <li>Horní lišta ukazuje, kdo je na tahu, a počet vyhraných partií vás i počítače od načtení stránky.</li>
       </ul>
     </div>
   </div>
@@ -63,15 +63,15 @@
   <main class="pente-main">
     <!-- horní lišta s indikátorem tahu, reset tlačítkem a skóre hráčů -->
     <div class="hud">
-      <div class="hud-box" aria-label="Počet tahu">
-        <span class="hud-label">Tah</span>
-        <span class="hud-value" id="moveCount">0</span>
+      <div class="hud-box" aria-label="Na tahu">
+        <span class="hud-label">Na tahu</span>
+        <span class="hud-value" id="moveCount">Vy</span>
       </div>
 
       <!-- obal tváre — tlačítko pro znovu spuštění hry -->
       <button type="button" id="faceBtn" class="face" title="Nová hra" aria-label="Nová hra">🙂</button>
 
-      <div class="hud-box" aria-label="Skóre hráče">
+      <div class="hud-box" aria-label="Vaše skóre">
         <span class="hud-label">Vy</span>
         <span class="hud-value" id="scoreX">0</span>
       </div>
@@ -84,18 +84,18 @@
 
     <!-- aktivní hráč — indikace, komu je na tahu -->
     <div class="turn-bar" id="turnBar">
-      <span class="dot dot-x"></span> Hrajete vy — postavte ✕
+      <span class="dot dot-x"></span> Jste na tahu (✕) – klikněte na volné políčko
     </div>
 
     <!-- relativní obal — uvnitr je velké hrací pole, nad ním může být prekryv stavů -->
     <div class="board-wrap">
       <!-- velké hrací pole — buňky generuje JS do CSS mrížky (30×20, stejný rozměr jako miny) -->
-      <div id="board" class="pente-board" role="grid" aria-label="Hrací pole PIŠKVORKY"></div>
+      <div id="board" class="pente-board" role="grid" aria-label="Hrací pole"></div>
 
       <!-- stavy hry (výhra / porážka) — prekryv pres hrací pole, skrytý když nepotrebujeme -->
       <div class="overlay" id="overlay" hidden>
         <p class="overlay-text" id="overlayText">Konec hry</p>
-        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Nová hra</button>
       </div>
     </div>
 

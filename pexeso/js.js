@@ -196,7 +196,7 @@ function zkontrolujKonec() {
   if (nalezeno === pocetDvojic(aktualniVelikost)) {
     konecHry = true;
     zjistiRekord();
-    overlayText.textContent = "Všechny dvojice nalezeny za " + tahy + " tahů!";
+    overlayText.textContent = "Hotovo! Všechny dvojice jste našli za " + tahy + " tahů.";
     overlay.hidden = false;
   }
 }

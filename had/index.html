@@ -18,7 +18,7 @@
 </head>
 <body class="snake-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,30 +28,31 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Klasický had — řídíte směr pohybu, sbíráte zrno a had roste. Zvláštnost této verze: stěny jsou průchozí, takže při narážení do zdi se had vynoří na opačné straně pole.</p>
+      <p>Klasická hra Had: řídíte hada po hracím poli, sbíráte jídlo (červené kuličky) a had s každým soustem roste. Zvláštnost této verze: okraje pole jsou průchozí – když had vyjede ven, vynoří se na opačné straně.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Had se neustále pohybuje dopředu po mřížce 20 × 20.</li>
-        <li>Požijete-li zrno, had poroste o jeden segment a získáte bod.</li>
-        <li>S každým zrnem hra zrychluje (stoupá úroveň rychlosti).</li>
-        <li>Narazíte-li do stěny, had projde a vynoří se na opačné straně.</li>
-        <li>Jediný způsob prohry je srážka s vlastním tělem.</li>
+        <li>Had se neustále pohybuje vpřed po mřížce 20 × 20 polí a na začátku měří 3 články.</li>
+        <li>Za každé snědené jídlo získáte bod a had se prodlouží o jeden článek.</li>
+        <li>Po každém soustu se had zrychlí a stoupne úroveň rychlosti, dokud nedosáhne maxima.</li>
+        <li>Okraje pole nejsou překážkou – had jimi projde a pokračuje z opačné strany.</li>
+        <li>Hra končí jedině tehdy, když had narazí do vlastního těla.</li>
+        <li>Otočit se přímo do protisměru nelze.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Šipky nebo WASD — změna směru</li>
-        <li>Mezerník / P — pauza / pokračování</li>
-        <li>R — nová hra</li>
-        <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em> a mobilní směrové tlačítko (D-pad)</li>
+        <li>Šipky nebo W, A, S, D – změna směru</li>
+        <li>Mezerník nebo P – pauza a pokračování</li>
+        <li>R – nová hra</li>
+        <li>Tlačítko <em>Pauza</em> (pauza a pokračování), <em>Nová hra</em> a směrová tlačítka se šipkami – myší nebo dotykem</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Pole je pevné 20 × 20 polí a stěny jsou průchozí.</li>
-        <li>Rychlost začíná pomalu a s každým zrnem se zvyšuje (do nastaveného stropu).</li>
-        <li>Rekord (nejvíce zrn) se ukládá do prohlížeče a přežije zavření stránky.</li>
+        <li>Hrací pole má pevnou velikost 20 × 20 polí s průchozími okraji.</li>
+        <li>Hra začíná pomalu a s každým soustem zrychluje až do maximální rychlosti.</li>
+        <li>Rekord (nejvyšší skóre) se po skončení hry uloží v prohlížeči a zůstane zachován i po zavření stránky.</li>
       </ul>
     </div>
   </div>
@@ -66,7 +67,7 @@
     <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (pauza/konec) -->
     <div class="board-wrap">
       <!-- herní pole — rozměr canvasu nastavuje JS podle velikosti mřížky -->
-      <canvas id="board" class="snake-board" width="480" height="480" aria-label="Herní pole Hada"></canvas>
+      <canvas id="board" class="snake-board" width="480" height="480" aria-label="Hrací pole"></canvas>
 
       <!-- stavy hry (pauza / konec) — překryv přes herní pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
@@ -80,7 +81,7 @@
       <!-- panel se statisticky hry -->
       <section class="panel stats-panel" aria-label="Statistiky">
         <div class="stat-row">
-          <span class="stat-label">Zrno</span>
+          <span class="stat-label">Skóre</span>
           <span class="stat-value" id="score">0</span>
         </div>
         <div class="stat-row">
@@ -103,14 +104,14 @@
         <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
         <p class="keys-help">
           <strong>Ovládání:</strong><br>
-          šipky / WASD = pohyb,<br>
-          mezerník = pauza,<br>
-          R = nová hra
+          šipky / WASD – pohyb<br>
+          mezerník / P – pauza<br>
+          R – nová hra
         </p>
       </section>
 
       <!-- mobilní D-pad pro dotyková zařízení -->
-      <section class="panel dpad-panel" aria-label="Směrové ovládání">
+      <section class="panel dpad-panel" aria-label="Směrová tlačítka">
         <button type="button" class="dpad up"    data-dir="up">↑</button>
         <button type="button" class="dpad left"  data-dir="left">←</button>
         <button type="button" class="dpad right" data-dir="right">→</button>

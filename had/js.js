@@ -270,8 +270,8 @@ function konecHry() {
       // localStorage nemusí být dostupný (např. soukromý režim) — rekord jen neuložíme
     }
   }
-  overlayText.textContent = `Konec hry · ${score} zrn`;
-  overlayBtn.textContent = "Zkusit znovu";
+  overlayText.textContent = `Konec hry – skóre: ${score}`;
+  overlayBtn.textContent = "Nová hra";
   pokazHry(true);
 }
 

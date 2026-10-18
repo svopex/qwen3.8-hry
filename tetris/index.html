@@ -18,7 +18,7 @@
 </head>
 <body class="tetris-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,33 +28,33 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Klasická skládačka — padající kostky (tetramino) točíte a posouváte tak, aby zaplnily celé řádky. Plný řádek zmizí a přinese body.</p>
+      <p>Klasická skládačka – padající kusy ze čtyř čtverečků otáčíte a posouváte tak, aby zaplnily celé řádky. Plný řádek zmizí a přinese vám body.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Z horního okraje pole neustále padají kusy tvořené ze 4 kostek (I, O, T, S, Z, J, L).</li>
-        <li>Kus můžete posouvat doleva/doprava, otáčet a rychle spouštět dolů.</li>
-        <li>Když se dopadne, zafixuje se a z horního okraje se objeví další kus.</li>
-        <li>Plně obsazený řádek se smaže — získáte body (100/300/500/800 × úroveň).</li>
-        <li>Hra končí, když nový kus už nemůžete umístit (hromada dosáhne střechy).</li>
+        <li>Shora do pole postupně padají kusy složené ze 4 čtverečků (tvary I, O, T, S, Z, J, L).</li>
+        <li>Padající kus můžete posouvat doleva a doprava, otáčet a urychlit jeho pád.</li>
+        <li>Jakmile kus dopadne na dno nebo na jiné kusy, zůstane ležet a shora se objeví další.</li>
+        <li>Zaplněný řádek zmizí. Za 1, 2, 3 nebo 4 řádky odstraněné najednou získáte 100, 300, 500 nebo 800 bodů vynásobených aktuální úrovní.</li>
+        <li>Hra končí, když se nový kus nevejde do pole, protože hromada dosáhla horního okraje.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>← → — pohyb kusu vlevo/vpravo</li>
-        <li>↑ — rotace</li>
-        <li>↓ — rychlé spuštění dolů (+1 bod)</li>
-        <li>Mezerník — okamžitý pád na dno (+2 body za buňku)</li>
-        <li>P — pauza / pokračování</li>
-        <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em> — klikací alternativy</li>
+        <li>← → – posun kusu doleva a doprava</li>
+        <li>↑ – otočení kusu po směru hodinových ručiček</li>
+        <li>↓ – zrychlený pád (+1 bod za každé políčko)</li>
+        <li>Mezerník – okamžitý pád na dno (+2 body)</li>
+        <li>P – pauza a pokračování ve hře</li>
+        <li>Tlačítka <em>Pauza</em> a <em>Nová hra</em> v bočním panelu ovládají hru myší.</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Hrací pole je pevné 10 × 20 polí.</li>
-        <li>Kusy se vybírají spravedlivým „7-bag" generátorem (vždy všech 7 tvarů v sadě).</li>
-        <li>Úroveň stoupá každých 10 přeskupených řádků a zvyšuje rychlost pádu (max. úroveň 15).</li>
-        <li>V panelu <em>Příští kus</em> vidíte, co padne jako další.</li>
+        <li>Hrací pole má pevný rozměr 10 × 20 políček.</li>
+        <li>Kusy se losují po sadách: v každé sedmici se každý ze 7 tvarů objeví právě jednou.</li>
+        <li>Každých 10 odstraněných řádků stoupne úroveň (nejvýše na 15) a kusy padají rychleji.</li>
+        <li>V panelu <em>Příští kus</em> vidíte, který kus přijde na řadu.</li>
       </ul>
     </div>
   </div>
@@ -87,7 +87,7 @@
       </section>
 
       <!-- panel se statistiky hry -->
-      <section class="panel stats-panel" aria-label="Skóre">
+      <section class="panel stats-panel" aria-label="Statistiky hry">
         <div class="stat-row">
           <span class="stat-label">Skóre</span>
           <span class="stat-value" id="score">0</span>
@@ -108,8 +108,9 @@
         <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
         <p class="keys-help">
           <strong>Ovládání:</strong><br>
-          ← → pohyb, ↑ rotace,<br>
-          ↓ rychlý pád, mezerník = pád na dno
+          ← → posun, ↑ otočení,<br>
+          ↓ zrychlení, mezerník – pád na dno,<br>
+          P – pauza
         </p>
       </section>
     </aside>

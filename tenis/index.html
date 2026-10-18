@@ -18,7 +18,7 @@
 </head>
 <body class="tenis-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,31 +28,32 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Klasická arkádová výměna míčku (Pong). Ovládejte raketu a pálkujte míček soupeři tak, aby ho minul.</p>
+      <p>Arkádový tenis ve stylu klasické hry Pong. Odrážejte míček raketou tak, aby ho soupeř nestihl vrátit.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Hráči vlevo a vpravo si posouvají rakety nahoru a dolů a odrážejí míček.</li>
-        <li>Míč se odráží od horního a dolního okraje a od raket; úhel odrazu závisí na místě dopadu na raketu.</li>
-        <li>Kdo míček minule (vyjde za jeho linii), soupeř získává bod.</li>
-        <li>S každým úderem míč zrychluje, takže výměny jsou stále rychlejší.</li>
-        <li>Vyhrává první hráč, dosáhne-li cílového skóre 5 bodů.</li>
+        <li>Každý hráč posouvá svou raketu nahoru a dolů a odráží míček na soupeřovu stranu.</li>
+        <li>Míček se odráží od horního a dolního okraje hřiště. Úhel odrazu od rakety závisí na tom, kam míček na raketu dopadne – čím blíž k jejímu okraji, tím ostřeji odletí.</li>
+        <li>Když hráč míček nevrátí a ten mu proletí za raketu, získává bod soupeř.</li>
+        <li>Každým úderem raketou se míček o něco zrychlí (až do nejvyšší povolené rychlosti), takže výměny jsou stále rychlejší.</li>
+        <li>Na začátku hry letí míček náhodně doleva, nebo doprava. Po každém bodu se podává ze středu hřiště směrem k hráči, který bod získal.</li>
+        <li>Vyhrává hráč, který jako první získá 5 bodů.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Hráč 1 (vlevo): W / S</li>
-        <li>Hráč 2 (vpravo): šipky ↑ / ↓</li>
-        <li>Mezerník / P — pauza / pokračování</li>
-        <li>R — nová hra</li>
-        <li>Tlačítka <em>Pauza</em>, <em>Nová hra</em></li>
+        <li>Hráč 1 (vlevo): W / S – nahoru / dolů</li>
+        <li>Hráč 2 (vpravo): šipky ↑ / ↓ (jen v režimu <em>Dva hráči</em>)</li>
+        <li>Mezerník nebo P – pauza / pokračování</li>
+        <li>R – nová hra</li>
+        <li>Totéž umožňují tlačítka <em>Pauza</em> a <em>Nová hra</em> v panelu u hřiště.</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Režim: <em>Dva hráči</em> (oba u jednoho klávesnice) nebo <em>Počítač</em> (hrajete vlevo proti AI vpravo).</li>
-        <li>Obtížnost počítače (jen v režimu Počítač): Lehký, Mírný, Střední, Pokročilý, Expert, Mistr a Bůh — liší se rychlostí rakety a pravděpodobností chyby.</li>
-        <li>Cíl hry je pevně 5 bodů; po změně režimu se hra automaticky restartuje.</li>
+        <li>Režim: <em>Dva hráči</em> (oba hrají u jedné klávesnice) nebo <em>Počítač</em> (hrajete vlevo proti počítači, který ovládá pravou raketu).</li>
+        <li>Obtížnost počítače (jen v režimu <em>Počítač</em>): Lehký, Mírný, Střední (výchozí), Pokročilý, Expert, Mistr a Bůh. Úrovně se liší rychlostí rakety počítače a tím, jak často chybuje – na úrovni Bůh chybuje jen výjimečně. Změna obtížnosti platí hned, bez restartu hry.</li>
+        <li>Hraje se vždy do 5 bodů. Po změně režimu začne automaticky nová hra.</li>
       </ul>
     </div>
   </div>
@@ -67,7 +68,7 @@
     <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (pauza/výhra) -->
     <div class="board-wrap">
       <!-- herní pole — rozměr canvasu odpovídá rozloze hřiště (poměr 16:9) -->
-      <canvas id="board" class="tenis-board" width="800" height="450" aria-label="Herní pole Tenisu"></canvas>
+      <canvas id="board" class="tenis-board" width="800" height="450" aria-label="Hrací pole hry Tenis"></canvas>
 
       <!-- stavy hry (pauza / konec) — překryv přes herní pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
@@ -89,7 +90,7 @@
           <span class="score-value" id="scoreRight">0</span>
         </div>
         <div class="score-row hint">
-          <span class="score-label">Vyhraje první s</span>
+          <span class="score-label">Hraje se do</span>
           <span class="score-value" id="target">5</span>
         </div>
       </section>
@@ -128,8 +129,8 @@
         <p class="keys-help">
           <strong>Hráč 1:</strong> W / S<br>
           <strong>Hráč 2:</strong> ↑ / ↓ (šipky)<br>
-          mezerník = pauza,<br>
-          R = nová hra
+          Mezerník nebo P – pauza<br>
+          R – nová hra
         </p>
       </section>
     </aside>

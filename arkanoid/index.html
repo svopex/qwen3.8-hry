@@ -18,7 +18,7 @@
 </head>
 <body class="arkanoid-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,30 +28,33 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Rozbijte všechny cihly míčkem, který se odráží od vaší plošiny. Míč nikdy nenechte dopadnout pod plošinu — jinak ztratíte život.</p>
+      <p>Rozbijte míčkem všechny cihly. Míček odrážejte plošinou – když ho nechytíte a propadne pod ni, přijdete o život.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Míč se odráží od stěn, od plošiny a od cihel; úhel odrazu závisí na místě, kde míč trefí plošinu.</li>
-        <li>Některé cihly jsou tvrdší (vydrží více úderů) — barva ukazuje zbývající pevnost.</li>
-        <li>Když rozbijete všechny cihly, postoupíte na další úroveň s rychlejším míčem a tvrdšími cihlami.</li>
-        <li>Ztratíte-li míč pod plošinou, ztratíte jeden život; po ztrátě třetího života hra končí.</li>
+        <li>Míček se odráží od stěn, od plošiny i od cihel. Směr odrazu určuje místo, kde míček plošinu zasáhne: čím blíž k jejímu okraji, tím šikměji odletí.</li>
+        <li>Některé cihly vydrží více zásahů. Barva ukazuje, kolik zásahů ještě vydrží: zelená 4, žlutá 3, oranžová 2, červená 1.</li>
+        <li>Za rozbitou cihlu získáte 10 bodů za každý zásah, který byl k jejímu rozbití potřeba (10–40 bodů).</li>
+        <li>Když rozbijete všechny cihly, postoupíte do další úrovně.</li>
+        <li>Za každý propadlý míček přijdete o jeden život a nový míček čeká na plošině. Když přijdete o všechny tři životy, hra končí.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>← → nebo myš / dotyk — pohyb plošiny</li>
-        <li>Mezerník / klik — vystřelit míček (když čeká na plošině)</li>
-        <li>P — pauza / pokračování</li>
-        <li>R — nová hra</li>
-        <li>Tlačítka <em>Vystřelit</em>, <em>Pozastavit</em>, <em>Nová hra</em></li>
+        <li>Šipky ← → (nebo A a D), myš či tažení prstem – pohyb plošiny</li>
+        <li>Mezerník, kliknutí nebo dotyk v hracím poli – vystřelení míčku z plošiny</li>
+        <li>Mezerník během letu míčku – pauza / pokračování</li>
+        <li>P – pauza / pokračování</li>
+        <li>R – nová hra</li>
+        <li>Totéž ovládají tlačítka <em>Vystřelit</em>, <em>Pauza</em> a <em>Nová hra</em></li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Začínáte se 3 životy a rychlostí míče, která roste s každou úrovní (do nastaveného stropu).</li>
-        <li>Úroveň zvyšuje počet řádků cihel i jejich tvrdost.</li>
-        <li>Rekord (nejvyšší skóre) se ukládá do prohlížeče a přežije zavření stránky.</li>
+        <li>Začínáte se 3 životy. Rychlost míčku roste s každou úrovní až do pevně dané hranice.</li>
+        <li>V první úrovni je 5 řad cihel, s každou další úrovní jedna řada přibude (nejvýše 9). Od 2. úrovně v řadách pravidelně chybějí některé cihly.</li>
+        <li>Horní řady jsou vždy tvrdší. Od 3. úrovně vydrží každá cihla o jeden zásah víc (nejvýše 4).</li>
+        <li>Rekord (nejvyšší skóre) se průběžně ukládá do prohlížeče a zůstane zachován i po zavření stránky.</li>
       </ul>
     </div>
   </div>
@@ -70,7 +73,7 @@
 
       <!-- stavy hry (pauza / konec / výhra) — překryv přes herní pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
-        <p class="overlay-text" id="overlayText">Pozastaveno</p>
+        <p class="overlay-text" id="overlayText">Hra je pozastavena</p>
         <button type="button" id="overlayBtn" class="ctrl-btn">Pokračovat</button>
       </div>
     </div>
@@ -100,13 +103,13 @@
       <!-- ovládací prvky — klikací alternativy k klávesnici -->
       <section class="panel controls-panel" aria-label="Ovládání">
         <button type="button" id="launchBtn" class="ctrl-btn full">Vystřelit</button>
-        <button type="button" id="pauseBtn" class="ctrl-btn full">Pozastavit</button>
+        <button type="button" id="pauseBtn" class="ctrl-btn full">Pauza</button>
         <button type="button" id="restartBtn" class="ctrl-btn full">Nová hra</button>
         <p class="keys-help">
           <strong>Ovládání:</strong><br>
-          ← → / myš = plošina,<br>
-          mezerník = odstřel / pauza,<br>
-          R = nová hra
+          ← → / A D / myš – plošina,<br>
+          mezerník – výstřel / pauza,<br>
+          P – pauza, R – nová hra
         </p>
       </section>
     </aside>

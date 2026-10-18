@@ -18,7 +18,7 @@
 </head>
 <body class="dama-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,30 +28,32 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Mezinárodní dámy proti počítači. Hrajete černé kameny dole, počítač bílé nahoře; kameny stojí jen na tmavých polích.</p>
+      <p>Klasická desková hra proti počítači. Hrajete s černými kameny dole, počítač s bílými nahoře. Kameny stojí jen na tmavých polích a začínáte vy.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Obyčejný kámen se pohybuje diagonálně dopředu o jedno pole.</li>
-        <li>Skok přes soupeřův kámen je povinný — pokud můžete skočit, musíte.</li>
-        <li>Po skoku musí stejný kámen pokračovat, dokud už dál skočit nemůže (řetězec skoků).</li>
-        <li>Kámen, který dorazí na poslední řadu, se promění v dámu.</li>
-        <li>Dáma letí libovolně daleko po diagonále ve všech směrech a může skákat přes více kamenů.</li>
-        <li>Vyhrává, kdo zničí všechny soupeřovy kameny nebo mu znemožní tah.</li>
+        <li>Kámen táhne šikmo dopředu o jedno pole.</li>
+        <li>Kámen bere jen dopředu: přeskočí soupeřův kámen na sousedním šikmém poli, pokud je pole za ním volné.</li>
+        <li>Braní je povinné – můžete-li brát, musíte. Pokud je více možností, vyberete si kteroukoli z nich.</li>
+        <li>Po skoku musí tentýž kámen brát dál, dokud to jde (vícenásobný skok). Sebrané kameny zmizí až na konci tahu a nelze je přeskočit podruhé.</li>
+        <li>Kámen, který dojde na poslední řadu, se promění v dámu. Dojde-li tam při skoku, tah tím končí.</li>
+        <li>Dáma táhne šikmo všemi směry o libovolný počet volných polí. Bere i na dálku – přeskočí soupeřův kámen a dopadne na kterékoli volné pole za ním.</li>
+        <li>Vyhrává, kdo sebere všechny soupeřovy kameny nebo soupeři znemožní táhnout.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Klikněte na svůj kámen a vybere se; zvýrazní se jeho legální tahy.</li>
-        <li>Klikněte na zvýrazněné cílové pole a provedete tah (včetně celého řetězce skoků najednou).</li>
-        <li>Tlačítko <em>Nová hra</em> — resetuje partii.</li>
+        <li>Kliknutím na svůj kámen ho vyberete a zvýrazní se pole, na která s ním můžete táhnout.</li>
+        <li>Kliknutím na zvýrazněné pole tah provedete – vícenásobný skok proběhne celý najednou.</li>
+        <li>Kliknutím na jiné pole výběr zrušíte.</li>
+        <li>Tlačítko se smajlíkem (<em>Nová hra</em>) začne novou partii.</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Pole je pevně 8 × 8 a pravidla odpovídají mezinárodnímu systému (povinný skok, dáma kluzem).</li>
-        <li>Počítač hraje silným vyhledáváním minimax s alfa/beta ořízkem do hloubky 8 tahů.</li>
-        <li>Hud ukazuje pořadí tahu a skóre obou stran napříč partiiemi.</li>
+        <li>Šachovnice má pevný rozměr 8 × 8 a každá strana začíná s 12 kameny.</li>
+        <li>Počítač propočítává 8 půltahů dopředu a hodnotí pozici podle počtu kamenů a dam.</li>
+        <li>Údaj <em>Tah</em> ukazuje pořadové číslo tahu (počítají se tahy obou stran), skóre udává počet vyhraných partií od načtení stránky.</li>
       </ul>
     </div>
   </div>
@@ -65,7 +67,7 @@
   <main class="dama-main">
     <!-- horní lišta s indikátorem tahu, reset tlačítkem a skóre hráčů -->
     <div class="hud">
-      <div class="hud-box" aria-label="Pořadí tahu">
+      <div class="hud-box" aria-label="Číslo tahu">
         <span class="hud-label">Tah</span>
         <span class="hud-value" id="moveCount">1</span>
       </div>
@@ -73,7 +75,7 @@
       <!-- obal tváře — tlačítko pro znovu spuštění hry -->
       <button type="button" id="faceBtn" class="face" title="Nová hra" aria-label="Nová hra">🙂</button>
 
-      <div class="hud-box" aria-label="Skóre hráče">
+      <div class="hud-box" aria-label="Vaše skóre">
         <span class="hud-label">Vy</span>
         <span class="hud-value" id="scoreHra">0</span>
       </div>
@@ -86,27 +88,27 @@
 
     <!-- aktivní hráč — indikace, komu je na tahu -->
     <div class="turn-bar" id="turnBar">
-      <span class="dot dot-hra"></span> Hrajete vy — klikněte na svůj kámen
+      <span class="dot dot-hra"></span> Jste na tahu – klikněte na svůj kámen
     </div>
 
     <!-- relativní obal — uvnitř je hrací šachovnice, nad ní může být překryv stavů -->
     <div class="board-wrap">
       <!-- hrací pole — 8×8 šachovnice, buňky generuje JS do CSS mřížky -->
-      <div id="board" class="dama-board" role="grid" aria-label="Hrací pole DÁMY"></div>
+      <div id="board" class="dama-board" role="grid" aria-label="Šachovnice"></div>
 
       <!-- stavy hry (výhra / porážka) — překryv přes hrací pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
         <p class="overlay-text" id="overlayText">Konec hry</p>
-        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Nová hra</button>
       </div>
     </div>
 
     <!-- nápověda s pravidly -->
     <p class="keys-help">
-      <strong>Pravidla:</strong> Kameny se pohybují diagonálně dopředu.
-      Skákáním přes soupeřův kámen ho znižíte — <strong>skok je povinný</strong>.
-      Na poslední řadě se kámen promění v <strong>dámu</strong>, která letí libovolně daleko.
-      Vyhrává, kdo zničí všechny soupeřovy kameny.
+      <strong>Pravidla:</strong> Kameny táhnou šikmo dopředu.
+      Soupeřův kámen seberete přeskočením – <strong>braní je povinné</strong>.
+      Na poslední řadě se kámen promění v <strong>dámu</strong>, která táhne o libovolný počet polí.
+      Vyhrává, kdo sebere všechny soupeřovy kameny nebo soupeři znemožní táhnout.
     </p>
   </main>
 </body>

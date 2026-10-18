@@ -18,7 +18,7 @@
 </head>
 <body class="g2048-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,29 +28,30 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Skládejte dlaždice s mocninami dvou posunováním po mřížce. Stejné dlaždice se při srážce spojí na dvojnásobek; cílem je vytvořit dlaždice 2048.</p>
+      <p>Posouvejte číselné dlaždice po mřížce a spojujte stejné hodnoty do vyšších mocnin dvou. Cílem je vytvořit dlaždici 2048.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Hrajete na mřížce 4 × 4 dlaždic.</li>
-        <li>Každým tahem posunete všechny dlaždice jedním směrem (vlevo, vpravo, nahoru, dolů).</li>
-        <li>Dvě dlaždice se stejnou hodnotou se při srážce sloučí a zdvojnásobí; z toho získáte body.</li>
-        <li>Po každém tahu se na náhodném volném místě objeví nová dlaždice (většinou 2, občas 4).</li>
-        <li>Vyhraje, kdo dosáhne dlaždice 2048; hra končí, když už není možné žádný tah udělat.</li>
+        <li>Hraje se na mřížce 4 × 4 políčka. Na začátku jsou na ní dvě dlaždice.</li>
+        <li>Každým tahem posunete všechny dlaždice co nejdál jedním směrem – doleva, doprava, nahoru nebo dolů.</li>
+        <li>Když do sebe narazí dvě dlaždice se stejnou hodnotou, spojí se v jednu s dvojnásobnou hodnotou. Každá dlaždice se v jednom tahu spojí nejvýše jednou.</li>
+        <li>Za každé spojení získáte tolik bodů, jaká je hodnota nové dlaždice.</li>
+        <li>Po každém tahu, při kterém se něco pohne, se na náhodném volném políčku objeví nová dlaždice – s pravděpodobností 90 % dvojka, jinak čtyřka.</li>
+        <li>Vyhrajete, jakmile vytvoříte dlaždici 2048. Hra končí, když je pole plné a žádné dvě sousední dlaždice už nelze spojit.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Šipky — posun dlaždic do zvoleného směru</li>
-        <li>Dotyk / tažení (swipe) na mobilu — stejný efekt jako šipky</li>
-        <li>Tlačítko <em>Nová hra</em> — resetuje mřížku a skóre</li>
+        <li>Šipky ← ↑ → ↓ – posun dlaždic zvoleným směrem</li>
+        <li>Tažení prstem po hracím poli (na dotykovém displeji) – posun dlaždic ve směru tahu</li>
+        <li>Tlačítko <em>Nová hra</em> – vymaže pole a vynuluje skóre</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Mřížka je pevně 4 × 4 a cílem vždy dlaždice 2048.</li>
-        <li>Dlaždice se sloučí s plynulou animací posunu a „vyfouknutím" nové hodnoty.</li>
-        <li>Rekord (nejvyšší skóre) se ukládá do prohlížeče a přežije zavření stránky.</li>
+        <li>Hra nemá žádná nastavení – mřížka má vždy 4 × 4 políčka a cílem je vždy dlaždice 2048.</li>
+        <li>Dlaždice se posouvají plynule, nové a spojené dlaždice se objevují s krátkou animací.</li>
+        <li>Rekord (nejvyšší dosažené skóre) se ukládá v prohlížeči, takže zůstane zachován i po zavření stránky.</li>
       </ul>
     </div>
   </div>
@@ -79,7 +80,7 @@
 
     <!-- krátké pravidlo hry nad polem -->
     <p class="rule-help">
-      Spojujte stejné číselné dlaždice šipkami, dokud nedosáhnete dlaždice <strong>2048</strong>.
+      Posouvejte dlaždice a spojujte stejná čísla, dokud nevytvoříte dlaždici <strong>2048</strong>.
     </p>
 
     <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavů (výhra / konec) -->
@@ -95,14 +96,14 @@
       <!-- stavy hry (výhra / konec) — překryv přes hrací pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
         <p class="overlay-text" id="overlayText">Konec hry</p>
-        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Nová hra</button>
       </div>
     </div>
 
     <!-- nápověda s ovládáním pod polem -->
     <p class="keys-help">
-      <strong>Ovládání:</strong> šipky ← ↑ → ↓ posouvají dlaždice;
-      na mobilu táhněte prstem po poli.
+      <strong>Ovládání:</strong> dlaždice posouvejte šipkami ← ↑ → ↓,
+      na dotykovém displeji tažením prstu po hracím poli.
     </p>
   </main>
 </body>

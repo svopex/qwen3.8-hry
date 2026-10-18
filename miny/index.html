@@ -18,7 +18,7 @@
 </head>
 <body class="miny-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,31 +28,32 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Hledáte miny na poli s volitelnou velikostí. Odkrývejte buňky, čísla vám napoví, kolik min má buňka kolem sebe, a vlajkami označujte podezřelá místa.</p>
+      <p>Klasická logická hra pro jednoho hráče. Odkryjte všechny buňky, pod kterými není mina. Čísla vám napoví, kolik min se skrývá v okolí, a podezřelá místa si můžete označit vlajkou.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Pole má volitelnou velikost (Malá až Max) se skrytými minami.</li>
-        <li>Klikněte na buňku a odkryjete ji — číslo ukazuje počet min v sousedních polích.</li>
-        <li>Pravým klikem (nebo režimem <em>Vlajky</em>) postavíte na podezřelou buňku vlajku 🚩.</li>
-        <li>Klik na odhalené číslo, které má kolem sebe tolik vlajek, jako ukazuje, odkryje zbývající sousedy (tzv. chord).</li>
-        <li>Trefíte-li minu, hra končí. Vyhraje hráč, který odkryje všechny buňky, které nejsou minami.</li>
+        <li>Pod některými buňkami hracího pole jsou ukryté miny.</li>
+        <li>Číslo na odkryté buňce udává, kolik min leží v sousedních buňkách (včetně úhlopříčných). Buňka bez min v okolí automaticky odkryje i své sousedy.</li>
+        <li>Buňky, pod kterými tušíte minu, označte vlajkou 🚩. Buňku s vlajkou nelze odkrýt.</li>
+        <li>Pokud je kolem odkrytého čísla stejný počet vlajek, jakou má číslo hodnotu, kliknutím na něj odkryjete všechny ostatní sousední buňky. Je-li některá vlajka chybně, můžete tím trefit minu.</li>
+        <li>Trefíte-li minu, hra končí – ukážou se všechny miny a chybně umístěné vlajky se označí ❌.</li>
+        <li>Vyhrajete, jakmile odkryjete všechny buňky bez min.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Levé tlačítko — odkrytí buňky</li>
-        <li>Pravé tlačítko — postavení / zrušení vlajky</li>
-        <li>Dvojklik na odhalené číslo — rychlé odkrytí sousedů (chord)</li>
-        <li>Tlačítka <em>Odkrývat</em> / <em>Vlajky</em> — přepínání režimu (užitečné pro dotyková zařízení)</li>
-        <li>Tvář 🙂 — nová hra</li>
+        <li>Levé tlačítko myši – odkrytí buňky</li>
+        <li>Pravé tlačítko myši – umístění nebo odebrání vlajky</li>
+        <li>Kliknutí nebo dvojklik na odkryté číslo – odkrytí okolních buněk</li>
+        <li>Tlačítka <em>Odkrývat</em> / <em>Vlajky</em> – přepínají, co udělá kliknutí nebo klepnutí na buňku (hodí se na dotykových zařízeních)</li>
+        <li>Smajlík 🙂 – nová hra</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Rozměr pole a počet min zvolíte tlačítky velikosti (Malá, Střední, Velká, Xtra, Max).</li>
-        <li>První klik je vždy bezpečný — miny se vygenerují až po něm, takže začátečník nikdy netrefí minu.</li>
-        <li>Hud obsahuje odpočítavač zbývajících min a časoměr.</li>
+        <li>Velikost pole zvolíte tlačítky: Malá (9 × 9, 10 min), Střední (12 × 12, 20 min), Velká (16 × 12, 30 min), Obří (20 × 14, 45 min) a Max (24 × 16, 60 min). Výchozí je Velká, změnou velikosti začne nová hra.</li>
+        <li>První odkrytí je vždy bezpečné – miny se rozmístí až po něm a nikdy ne pod zvolenou buňku ani do jejího okolí, takže se hned odkryje větší oblast.</li>
+        <li>Počítadlo <em>Miny</em> ukazuje počet min zmenšený o počet umístěných vlajek (může být i záporné). <em>Čas</em> měří sekundy od prvního odkrytí buňky.</li>
       </ul>
     </div>
   </div>
@@ -97,14 +98,14 @@
       <!-- stavy hry (výhra / prohry) — překryv přes hrací pole, skrytý když nepotřebujeme -->
       <div class="overlay" id="overlay" hidden>
         <p class="overlay-text" id="overlayText">Konec hry</p>
-        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Nová hra</button>
       </div>
     </div>
 
     <!-- nápověda s ovládáním -->
     <p class="keys-help">
-      <strong>Ovládání:</strong> levé tlačítko = odkrýt, pravé tlačítko = vlajka,
-      dvojklik / stisknuté číslo = rychlé odkrytí sousedů.
+      <strong>Ovládání:</strong> levé tlačítko – odkrýt buňku, pravé tlačítko – vlajka,
+      kliknutí nebo dvojklik na číslo – odkrytí okolních buněk.
     </p>
   </main>
 </body>

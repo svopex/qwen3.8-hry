@@ -18,7 +18,7 @@
 </head>
 <body class="gpex-body">
   <!-- info tlačítko — otevře okno s popisem, pravidly a ovládáním hry -->
-  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak se hra hraje">?</button>
+  <button type="button" class="info-toggle" aria-label="Informace o hře" title="Jak hrát">?</button>
 
   <!-- info okno: statický obsah s popisem, pravidly, ovládáním a nastavením -->
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
@@ -28,28 +28,30 @@
         <button type="button" class="info-close" aria-label="Zavřít informace">✕</button>
       </div>
 
-      <p>Klasické pexeso — odvrácejte karty po dvou a hledejte dvojice stejných symbolů. Vyhraje, kdo najde všechny dvojice v co nejmenším počtu tahů.</p>
+      <p>Klasické pexeso pro jednoho hráče – otáčejte karty po dvou a hledejte dvojice stejných symbolů. Cílem je najít všechny dvojice na co nejmenší počet tahů.</p>
 
       <h3 class="info-section">Pravidla</h3>
       <ul class="info-list">
-        <li>Karty leží rubem dolů; každým tahem odvrátíte dvě karty.</li>
-        <li>Souhlasí-li symboly, zůstanou odkryté a spočítají se jako nalezená dvojice.</li>
-        <li>Nesouhlasí-li, karty se po krátké chvíli otočí zpět rubem dolů.</li>
-        <li>Hra skončí, když jsou nalezeny všechny dvojice.</li>
+        <li>Karty leží lícem dolů. V každém tahu otočíte dvě karty.</li>
+        <li>Pokud mají obě karty stejný symbol, zůstanou odkryté a započítají se jako nalezená dvojice.</li>
+        <li>Pokud se symboly liší, karty se po krátké chvíli samy otočí zpět. Do té doby nelze otáčet další karty.</li>
+        <li>Za tah se počítá každá otočená dvojice karet, ať už se shoduje, nebo ne. Čas se neměří.</li>
+        <li>Hra skončí, jakmile najdete všechny dvojice.</li>
       </ul>
 
       <h3 class="info-section">Ovládání</h3>
       <ul class="info-list">
-        <li>Klikněte na kartu a odvrátíte ji.</li>
-        <li>Tlačítko <em>Nová hra</em> — zamíchá nové karty a resetuje tahy.</li>
+        <li>Kliknutím na kartu ji otočíte.</li>
+        <li>Na kartu se můžete přesunout také klávesou Tab a otočit ji klávesou Enter nebo mezerníkem.</li>
+        <li>Tlačítko <em>Nová hra</em> znovu zamíchá karty, vybere novou sadu symbolů a vynuluje tahy i nalezené dvojice.</li>
       </ul>
 
       <h3 class="info-section">Nastavení hry</h3>
       <ul class="info-list">
-        <li>Velikost pole: 4×4 (8 dvojic), 5×5 (12 dvojic) nebo 6×6 (18 dvojic) — tlačítka nad polem.</li>
-        <li>Při lichém poli 5×5 zbývá jedna prázdná buňka; počet dvojic je 12.</li>
-        <li>Sada symbolů se vybírá náhodně ze čtyř sad (ovoce, zvířata, příroda, sport).</li>
-        <li>Rekord = nejméně tahů pro danou velikost; ukládá se zvlášť pro každou velikost.</li>
+        <li>Velikost pole zvolíte tlačítky nad polem: 4 × 4 (8 dvojic), 5 × 5 (12 dvojic) nebo 6 × 6 (18 dvojic). Změnou velikosti začne nová hra.</li>
+        <li>Pole 5 × 5 má lichý počet políček, proto na náhodném místě zůstane jedno prázdné.</li>
+        <li>Při každé nové hře se náhodně vybere jedna ze čtyř sad symbolů: ovoce a zelenina, zvířata, příroda a počasí, nebo sport a volný čas.</li>
+        <li>Rekord je nejmenší počet tahů, za který jste hru dokončili. Ukládá se v prohlížeči zvlášť pro každou velikost pole.</li>
       </ul>
     </div>
   </div>
@@ -73,7 +75,7 @@
         <span class="hud-value" id="dvojice">0 / 8</span>
       </div>
 
-      <div class="hud-box" aria-label="Nejlepší výkon (nejméně tahů)">
+      <div class="hud-box" aria-label="Rekord – nejmenší počet tahů pro zvolenou velikost pole">
         <span class="hud-label">Rekord</span>
         <span class="hud-value" id="rekord">–</span>
       </div>
@@ -83,15 +85,15 @@
 
     <!-- krátké pravidlo hry nad polem -->
     <p class="rule-help">
-      Odvracej karty po dvou a najdi všechny <strong>dvojice</strong> stejných symbolů.
+      Otáčejte karty po dvou a najděte všechny <strong>dvojice</strong> stejných symbolů.
     </p>
 
     <!-- volba velikosti hracího pole — hráč si tlačítkem vybere obtížnost -->
     <div class="size-select" role="group" aria-label="Velikost hracího pole">
       <span class="size-label">Velikost pole</span>
-      <button type="button" class="size-btn" data-velikost="4">4×4</button>
-      <button type="button" class="size-btn" data-velikost="5">5×5</button>
-      <button type="button" class="size-btn" data-velikost="6">6×6</button>
+      <button type="button" class="size-btn" data-velikost="4">4 × 4</button>
+      <button type="button" class="size-btn" data-velikost="5">5 × 5</button>
+      <button type="button" class="size-btn" data-velikost="6">6 × 6</button>
     </div>
 
     <!-- rel. obal — uvnitř je hrací pole, nad ním může být překryv stavu výhry -->
@@ -102,13 +104,13 @@
       <!-- stav výhry — překryv přes hrací pole, skrytý dokud hra neskončí -->
       <div class="overlay" id="overlay" hidden>
         <p class="overlay-text" id="overlayText">Všechny dvojice nalezeny!</p>
-        <button type="button" id="overlayBtn" class="ctrl-btn">Zkusit znovu</button>
+        <button type="button" id="overlayBtn" class="ctrl-btn">Nová hra</button>
       </div>
     </div>
 
     <!-- nápověda s ovládáním pod polem -->
     <p class="keys-help">
-      <strong>Ovládání:</strong> klikni na kartu, aby se odvrátila; najdi její dvojici.
+      <strong>Ovládání:</strong> kliknutím kartu otočíte (z klávesnice klávesou Enter nebo mezerníkem).
     </p>
   </main>
 </body>

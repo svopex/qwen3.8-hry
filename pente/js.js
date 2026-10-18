@@ -88,8 +88,8 @@ function refreshVse() {
 // Nastaví text a barvu lišty tahu podle toho, kdo hraje.
 function nastaviTah(tahHrade) {
   turnBar.innerHTML = tahHrade
-    ? '<span class="dot dot-x"></span> Hrajete vy — postavte ✕'
-    : '<span class="dot dot-o"></span> Počítač — sahá ⊙';
+    ? '<span class="dot dot-x"></span> Jste na tahu (✕) – klikněte na volné políčko'
+    : '<span class="dot dot-o"></span> Na tahu je počítač (⊙)…';
 }
 
 // Aktualizuje ukazatele v HUD (tah, skóre).
@@ -161,11 +161,11 @@ function konecHryVyhra(vlastnik, pozice) {
   if (vlastnik === VLASTNIK_HRA) {
     skoreHra++;
     faceBtn.textContent = "\u{1F60E}"; // 😎
-    overlayText.textContent = "Vyhráváte!";
+    overlayText.textContent = "Vyhráli jste!";
   } else {
     skorePc++;
     faceBtn.textContent = "\u{1F615}"; // 😵
-    overlayText.textContent = "Počítač vyhrál.";
+    overlayText.textContent = "Prohráli jste – vyhrál počítač.";
   }
   aktualizujSkore();
   overlay.hidden = false;
@@ -175,7 +175,7 @@ function konecHryVyhra(vlastnik, pozice) {
 function konecHryRemizu() {
   konecHry = true;
   faceBtn.textContent = "\u{1F610}"; // 😐
-  overlayText.textContent = "Remíza — pole je plné.";
+  overlayText.textContent = "Remíza – pole je zaplněné.";
   aktualizujSkore();
   overlay.hidden = false;
 }

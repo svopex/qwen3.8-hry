@@ -270,7 +270,7 @@ function zkontrolujKonec() {
       for (let x = 0; x < VELKOST; x++) {
         if (mridka[y][x] >= 2048) {
           vyhra = true;
-          pokazHry("Výhra! Dosáhli jste 2048.");
+          pokazHry("Vyhráli jste! Vytvořili jste dlaždici 2048.");
           return;
         }
       }
@@ -280,7 +280,7 @@ function zkontrolujKonec() {
   // konec — žádné možné tahy
   if (!jsouMožneTahy()) {
     konecHry = true;
-    pokazHry(`Konec hry · ${score}`);
+    pokazHry(`Konec hry – skóre: ${score}`);
   }
 }
 

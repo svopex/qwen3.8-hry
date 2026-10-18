@@ -360,9 +360,9 @@ function konecHry() {
   paused = true;
   gameOver = true;
   overlayText.textContent = "Konec hry";
-  overlayBtn.textContent = "Zkusit znovu";
+  overlayBtn.textContent = "Nová hra";
   // při konci hry zobrazí skóre v popisku
-  overlayText.textContent = `Konec hry · ${score}`;
+  overlayText.textContent = `Konec hry – skóre: ${score}`;
   pokazHry(true);
 }
 
