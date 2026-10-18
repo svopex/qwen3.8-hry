@@ -10,8 +10,12 @@ const ROWS = 20;
 
 // ---- Rychlost (interval mezi kroky v ms) ----
 const BASE_INTERVAL = 150; // úvodní rychlost
-const MIN_INTERVAL = 60;   // nejrychlejší možný krok
-const SPEED_STEP = 4;      // o kolik ms zrychlí se hra po každém zrně
+const MIN_INTERVAL = 110;  // nejrychlejší možný krok (odpovídá nejvyšší úrovni)
+const MAX_LEVEL = 5;       // nejvyšší úroveň rychlosti
+const FOOD_PER_LEVEL = 7;  // kolik zrn je potřeba sníst na zvýšení úrovně o jednu
+// o kolik ms se zkrátí krok při zvýšení úrovně — rozloženo tak,
+// aby úroveň MAX_LEVEL přesně odpovídala MIN_INTERVAL
+const SPEED_STEP = (BASE_INTERVAL - MIN_INTERVAL) / (MAX_LEVEL - 1);
 
 // ==== Globální stav hry ====
 let snake;       // pole buněk hada, hlavička jako první prvek: {x, y}
@@ -171,12 +175,11 @@ function aktualizujStat() {
   bestEl.textContent = best;
 }
 
-// Zrychlí hru o jeden krok (pokud ještě lze) a zvýší úroveň rychlosti.
+// Přepočítá úroveň rychlosti podle skóre: každých FOOD_PER_LEVEL zrn
+// zvýší úroveň o jednu, nejvýše na MAX_LEVEL, a podle ní nastaví interval kroku.
 function zrychli() {
-  if (intervalMs > MIN_INTERVAL) {
-    intervalMs = Math.max(MIN_INTERVAL, intervalMs - SPEED_STEP);
-    level++;
-  }
+  level = Math.min(MAX_LEVEL, 1 + Math.floor(score / FOOD_PER_LEVEL));
+  intervalMs = Math.max(MIN_INTERVAL, BASE_INTERVAL - (level - 1) * SPEED_STEP);
 }
 
 // ==== Zrno ====
